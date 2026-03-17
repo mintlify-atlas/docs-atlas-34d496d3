@@ -48,8 +48,8 @@ beautify.css(sourceCode: string, options?: object): string
       Indent with tabs instead of spaces.
     </ParamField>
 
-    <ParamField path="eol" type="string" default="\n">
-      Line terminator character(s). Use `\r\n` for Windows-style endings, or `auto` to detect from input.
+    <ParamField path="eol" type="string" default="auto">
+      Line terminator character(s). `auto` uses the first newline found in the input file, or `\n` if none is found. Accepts `\n`, `\r\n`, or `\r`.
     </ParamField>
 
     <ParamField path="end_with_newline" type="boolean" default="false">

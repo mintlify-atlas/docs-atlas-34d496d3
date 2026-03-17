@@ -94,8 +94,8 @@ cssbeautifier.default_options() -> BeautifierOptions
     Indent with tabs instead of spaces.
   </ParamField>
 
-  <ParamField path="eol" type="str" default="\n">
-    Line terminator character(s).
+  <ParamField path="eol" type="str" default="auto">
+    Line terminator character(s). `auto` uses the first newline found in the input, or `\n` if none is found.
   </ParamField>
 
   <ParamField path="end_with_newline" type="bool" default="False">

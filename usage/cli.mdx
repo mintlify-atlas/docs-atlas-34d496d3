@@ -51,7 +51,7 @@ html-beautify index.html
 | `-s, --indent-size` | `4` | Number of spaces per indentation level |
 | `-c, --indent-char` | `" "` | Character to use for indentation |
 | `-t, --indent-with-tabs` | — | Indent with tabs (overrides `-s` and `-c`) |
-| `-e, --eol` | `"\n"` | Line terminator character(s) |
+| `-e, --eol` | `auto` | Line terminator character(s). `auto` uses first newline in file, else `\n`. |
 | `-n, --end-with-newline` | — | End the output with a newline |
 | `-b, --brace-style` | `collapse` | Brace placement (`collapse\|expand\|end-expand\|none`) |
 | `-w, --wrap-line-length` | `0` | Wrap lines exceeding N characters |

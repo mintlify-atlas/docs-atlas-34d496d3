@@ -53,7 +53,7 @@ Beautified output is written to stdout by default. You can also invoke the HTML 
 | `-n` | `--end-with-newline` | `false` | End output with a newline. |
 | `-p` | `--preserve-newlines` | `true` | Preserve existing line breaks. Use `--no-preserve-newlines` to disable. |
 | `-m` | `--max-preserve-newlines` | `10` | Maximum blank lines to preserve in one chunk. |
-| `-w` | `--wrap-line-length` | `250` | Maximum characters per line. `0` disables wrapping. |
+| `-w` | `--wrap-line-length` | `0` | Maximum characters per line. `0` disables wrapping. |
 | `-b` | `--brace-style` | `collapse` | Brace style: `collapse`, `expand`, `end-expand`, `none`, `collapse-preserve-inline`. |
 | | `--templating` | `auto` | Templating languages to recognize. `auto` enables all in HTML context. Values: `auto`, `none`, `django`, `erb`, `handlebars`, `php`, `smarty`, `angular`. |
 
@@ -70,6 +70,7 @@ Beautified output is written to stdout by default. You can also invoke the HTML 
 | Flag | Long form | Default | Description |
 |------|-----------|---------|-------------|
 | `-I` | `--indent-inner-html` | `false` | Indent the contents of `<head>` and `<body>` elements. |
+| `-H` | `--indent-handlebars` | `false` | Indent Handlebars block expressions and their content. |
 | `-S` | `--indent-scripts` | `normal` | Indentation of `<script>` tag content: `keep`, `separate`, or `normal`. |
 | `-d` | `--inline` | (standard inline tags) | Comma-separated list of tags to treat as inline elements. |
 | | `--inline_custom_elements` | `true` | Treat custom elements (hyphenated names) as inline. |

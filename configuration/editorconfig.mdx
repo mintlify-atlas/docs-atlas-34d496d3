@@ -11,9 +11,9 @@ When EditorConfig integration is active, JS Beautify reads the following `.edito
 
 | EditorConfig property | JS Beautify option | Notes |
 |---|---|---|
-| `indent_style` | `indent_with_tabs` / `indent_char` | `tab` sets `indent_with_tabs: true`; `space` uses spaces |
+| `indent_style` | `indent_with_tabs` / `indent_char` | `tab` sets `indent_with_tabs: true`; `space` sets `indent_with_tabs: false` |
 | `indent_size` | `indent_size` | |
-| `tab_width` | `indent_size` | Used when `indent_style = tab` |
+| `max_line_length` | `wrap_line_length` | `off` maps to `0` (disabled) |
 | `end_of_line` | `eol` | `lf` → `"\n"`, `crlf` → `"\r\n"`, `cr` → `"\r"` |
 | `insert_final_newline` | `end_with_newline` | `true` / `false` |
 

@@ -60,7 +60,7 @@ When installed globally (`npm install -g js-beautify`), the `js-beautify` execut
 | Flag | Long form | Default | Description |
 |------|-----------|---------|-------------|
 | `-P` | `--space-in-paren` | `false` | Add padding spaces inside parentheses: `f( a, b )`. |
-| `-E` | `--space-in-empty-paren` | `false` | Add a space inside empty parentheses: `f( )`. |
+| `-Q` | `--space-in-empty-paren` | `false` | Add a space inside empty parentheses: `f( )`. |
 | `-j` | `--jslint-happy` | `false` | Enable JSLint-stricter mode. Implies `--space-after-anon-function`. |
 | `-a` | `--space-after-anon-function` | `false` | Add a space before anonymous function parens: `function ()`. |
 | | `--space-after-named-function` | `false` | Add a space before named function parens: `function example ()`. |
@@ -79,11 +79,12 @@ When installed globally (`npm install -g js-beautify`), the `js-beautify` execut
 | `-k` | `--keep-array-indentation` | `false` | Preserve original array indentation. |
 | `-x` | `--unescape-strings` | `false` | Decode printable characters encoded in `\xNN` notation. |
 | `-X` | `--e4x` | `false` | Pass E4X XML literals through untouched. |
+| | `--good-stuff` | — | Enables `--keep-array-indentation` and `--jslint-happy` together. |
 
 ## Examples
 
 ```bash
-# Beautify from stdin to stdout
+# Beautify from stdin to stdout (pipe to - filename)
 echo 'function foo(){return 42;}' | js-beautify -
 
 # Beautify a file, output to stdout
@@ -108,7 +109,7 @@ js-beautify --indent-with-tabs --brace-style expand app.js
 js-beautify --config .jsbeautifyrc app.js
 
 # Pipe from another tool
-cat bundle.min.js | js-beautify --stdin -s 2 > bundle.formatted.js
+cat bundle.min.js | js-beautify - -s 2 > bundle.formatted.js
 ```
 
 <Tip>

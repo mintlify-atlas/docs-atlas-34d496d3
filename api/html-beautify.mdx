@@ -50,8 +50,8 @@ beautify.html(sourceCode: string, options?: object): string
       Indent with tabs instead of spaces.
     </ParamField>
 
-    <ParamField path="eol" type="string" default="\n">
-      Line terminator character(s). Use `\r\n` for Windows-style endings, or `auto` to detect from input.
+    <ParamField path="eol" type="string" default="auto">
+      Line terminator character(s). `auto` uses the first newline found in the input file, or `\n` if none is found. Accepts `\n`, `\r\n`, or `\r`.
     </ParamField>
 
     <ParamField path="end_with_newline" type="boolean" default="false">
@@ -67,15 +67,27 @@ beautify.html(sourceCode: string, options?: object): string
     </ParamField>
 
     <ParamField path="indent_inner_html" type="boolean" default="false">
-      Indent the contents of `<head>` and `<body>` elements. When `false`, their direct children are placed at the root indentation level.
+      Indent the contents of both `<head>` and `<body>` elements. When `false`, their direct children are placed at the root indentation level. Setting this to `true` overrides `indent_head_inner_html` and `indent_body_inner_html`.
+    </ParamField>
+
+    <ParamField path="indent_body_inner_html" type="boolean" default="true">
+      Indent the contents of the `<body>` element independently of `indent_head_inner_html`. Only takes effect when `indent_inner_html` is `false`.
+    </ParamField>
+
+    <ParamField path="indent_head_inner_html" type="boolean" default="true">
+      Indent the contents of the `<head>` element independently of `indent_body_inner_html`. Only takes effect when `indent_inner_html` is `false`.
+    </ParamField>
+
+    <ParamField path="indent_handlebars" type="boolean" default="true">
+      Indent Handlebars block expressions (`{{#if}}`, `{{#each}}`, etc.) and their content.
     </ParamField>
 
     <ParamField path="indent_scripts" type="string" default="normal">
       Sets the indentation level of content inside `<script>` tags. Accepted values: `keep` (match surrounding HTML), `separate` (use an independent indent level), `normal` (indent relative to the script tag).
     </ParamField>
 
-    <ParamField path="wrap_line_length" type="number" default="250">
-      Wrap lines that exceed this many characters. Set to `0` to disable.
+    <ParamField path="wrap_line_length" type="number" default="0">
+      Wrap lines that exceed this many characters. Set to `0` to disable wrapping.
     </ParamField>
 
     <ParamField path="wrap_attributes" type="string" default="auto">
