@@ -1,0 +1,249 @@
+---
+title: "CSS Beautifier"
+description: "Reformat and re-indent CSS and SCSS using css_beautify."
+---
+
+The CSS beautifier reformats and re-indents CSS source code. It expands compressed stylesheets into readable, consistently indented output.
+
+<Note>
+  The Python `cssbeautifier` package is a separate install from the JavaScript beautifier. Install it with `pip install cssbeautifier`. The Node.js `js-beautify` package includes the CSS beautifier.
+</Note>
+
+## Before and after
+
+<CodeGroup>
+
+```css before.css
+body{margin:0;padding:0;font-family:sans-serif;background:#fff}.container{max-width:1200px;margin:0 auto;padding:0 20px}.btn,.btn-primary{display:inline-block;padding:8px 16px;border-radius:4px;cursor:pointer}.btn-primary{background:#007bff;color:#fff;border:none}
+```
+
+```css after.css
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: #fff
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px
+}
+
+.btn,
+.btn-primary {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer
+}
+
+.btn-primary {
+    background: #007bff;
+    color: #fff;
+    border: none
+}
+```
+
+</CodeGroup>
+
+## Key options
+
+### `brace_style`
+
+Controls brace placement. Only `collapse` and `expand` are implemented for CSS.
+
+| Value | Description |
+| --- | --- |
+| `collapse` | Opening brace on same line as selector (default) |
+| `expand` | Opening brace on its own line |
+
+<Tabs>
+  <Tab title="collapse (default)">
+    ```css
+    .selector {
+        color: red;
+        font-size: 14px;
+    }
+    ```
+  </Tab>
+  <Tab title="expand">
+    ```css
+    .selector
+    {
+        color: red;
+        font-size: 14px;
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### `selector_separator_newline`
+
+When `true` (default), places each selector in a multi-selector rule on its own line.
+
+<Tabs>
+  <Tab title="selector_separator_newline: true (default)">
+    ```css
+    h1,
+    h2,
+    h3 {
+        font-weight: bold;
+    }
+    ```
+  </Tab>
+  <Tab title="selector_separator_newline: false">
+    ```css
+    h1, h2, h3 {
+        font-weight: bold;
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### `newline_between_rules`
+
+When `true` (default), adds a blank line between CSS rule blocks.
+
+<Tabs>
+  <Tab title="newline_between_rules: true (default)">
+    ```css
+    .foo {
+        color: red;
+    }
+
+    .bar {
+        color: blue;
+    }
+    ```
+  </Tab>
+  <Tab title="newline_between_rules: false">
+    ```css
+    .foo {
+        color: red;
+    }
+    .bar {
+        color: blue;
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### `indent_size` and `indent_char`
+
+`indent_size` sets the number of characters per indentation level. `indent_char` sets the character used for indentation. Use `indent_with_tabs: true` to indent with tabs instead.
+
+```javascript
+const beautify_css = require('js-beautify').css;
+
+// 2-space indentation
+beautify_css(source, { indent_size: 2, indent_char: ' ' });
+
+// Tab indentation
+beautify_css(source, { indent_with_tabs: true });
+```
+
+**Result with `indent_size: 2`:**
+
+```css
+.container {
+  display: flex;
+  align-items: center;
+
+  .inner {
+    padding: 1rem;
+  }
+}
+```
+
+## All CSS-specific options at a glance
+
+<AccordionGroup>
+  <Accordion title="brace_style">
+    **Default:** `"collapse"`  
+    **Values:** `collapse`, `expand`
+
+    Controls placement of opening braces relative to selectors.
+  </Accordion>
+  <Accordion title="selector_separator_newline">
+    **Default:** `true`
+
+    Place each selector in a multi-selector rule on its own line.
+  </Accordion>
+  <Accordion title="newline_between_rules">
+    **Default:** `true`
+
+    Insert a blank line between CSS rule blocks.
+  </Accordion>
+  <Accordion title="space_around_combinator">
+    **Default:** `false`
+
+    Add spaces around CSS combinators such as `>`, `~`, and `+`.
+  </Accordion>
+  <Accordion title="indent_size">
+    **Default:** `4`
+
+    Number of characters per indentation level.
+  </Accordion>
+  <Accordion title="indent_char">
+    **Default:** `" "` (space)
+
+    Character used for indentation.
+  </Accordion>
+  <Accordion title="indent_with_tabs">
+    **Default:** `false`
+
+    Indent with tabs. Overrides `indent_size` and `indent_char`.
+  </Accordion>
+  <Accordion title="end_with_newline">
+    **Default:** `false`
+
+    End output with a trailing newline.
+  </Accordion>
+  <Accordion title="indent_empty_lines">
+    **Default:** `false`
+
+    Keep indentation on otherwise empty lines.
+  </Accordion>
+</AccordionGroup>
+
+## Usage
+
+<Tabs>
+  <Tab title="Node.js">
+    ```javascript
+    const beautify_css = require('js-beautify').css;
+
+    const ugly = 'body{margin:0;padding:0}.btn{display:inline-block}';
+    const pretty = beautify_css(ugly, {
+        indent_size: 2,
+        selector_separator_newline: true,
+        newline_between_rules: true
+    });
+
+    console.log(pretty);
+    ```
+  </Tab>
+  <Tab title="CLI">
+    ```bash
+    css-beautify --indent-size 2 style.css
+
+    # or via js-beautify with --css flag
+    js-beautify --css --indent-size 2 style.css
+    ```
+  </Tab>
+  <Tab title="Python">
+    ```bash
+    pip install cssbeautifier
+    ```
+
+    ```python
+    import cssbeautifier
+
+    opts = cssbeautifier.default_options()
+    opts.indent_size = 2
+    result = cssbeautifier.beautify('body{margin:0}', opts)
+    ```
+  </Tab>
+</Tabs>

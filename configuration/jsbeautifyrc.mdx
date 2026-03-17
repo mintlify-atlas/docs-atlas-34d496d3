@@ -1,0 +1,100 @@
+---
+title: ".jsbeautifyrc"
+description: "Configure the JavaScript beautifier using a JSON config file, environment variables, or the --config CLI flag."
+---
+
+The JavaScript CLI supports loading configuration from the filesystem automatically, so you do not need to pass flags on every invocation. There are three ways to supply configuration, listed from highest to lowest priority:
+
+1. `jsbeautify_`-prefixed environment variables
+2. A JSON file specified with `--config <path>`
+3. A `.jsbeautifyrc` file found at any directory level from `$PWD` upward
+
+Configuration sources higher in this list override lower ones. CLI flags override all of them.
+
+<Note>
+  This automatic config loading is JavaScript-only. The Python `jsbeautifier` package reads options passed directly to the API and does not look for a `.jsbeautifyrc` file.
+</Note>
+
+## .jsbeautifyrc file
+
+Create a `.jsbeautifyrc` file in your project root (or any ancestor directory). The beautifier searches from the current working directory upward until it finds one.
+
+The file must contain valid JSON. Option names use underscores, matching the library API.
+
+```json
+{
+    "indent_size": 2,
+    "indent_char": " ",
+    "indent_level": 0,
+    "end_with_newline": true,
+    "indent_with_tabs": false,
+    "preserve_newlines": true,
+    "max_preserve_newlines": 10,
+    "jslint_happy": false,
+    "space_after_anon_function": false,
+    "brace_style": "collapse,preserve-inline",
+    "keep_array_indentation": false,
+    "space_before_conditional": true,
+    "break_chained_methods": false,
+    "eval_code": false,
+    "unescape_strings": false,
+    "wrap_line_length": 0,
+    "css": {
+        "selector_separator_newline": false
+    }
+}
+```
+
+You can include language-specific overrides as nested objects. The example above sets `selector_separator_newline` only when beautifying CSS. See [Language-specific overrides](/configuration/language-overrides) for the full inheritance model.
+
+## --config flag
+
+Point to any JSON file using the `--config` flag:
+
+```bash
+js-beautify --config path/to/my-config.json foo.js
+```
+
+The config file format is identical to `.jsbeautifyrc`.
+
+## Environment variables
+
+Prefix any option name with `jsbeautify_` to set it as an environment variable:
+
+```bash
+export jsbeautify_indent_size=2
+export jsbeautify_end_with_newline=true
+js-beautify foo.js
+```
+
+Environment variable values are strings, so numeric options like `indent_size` are parsed to integers automatically. Boolean values accept `true` or `false`.
+
+## Priority order
+
+When multiple configuration sources define the same option, the following precedence applies (highest first):
+
+| Source | Priority |
+|---|---|
+| CLI flags (e.g. `--indent-size 4`) | Highest |
+| `jsbeautify_`-prefixed environment variables | High |
+| `--config` file | Medium |
+| `.jsbeautifyrc` (nearest ancestor) | Low |
+| Built-in defaults | Lowest |
+
+## Minimal example
+
+A typical `.jsbeautifyrc` for a project using 2-space indentation and a trailing newline:
+
+```json
+{
+    "indent_size": 2,
+    "end_with_newline": true,
+    "brace_style": "collapse,preserve-inline"
+}
+```
+
+Drop this file in your repository root and run `js-beautify` without any additional flags:
+
+```bash
+js-beautify src/index.js
+```

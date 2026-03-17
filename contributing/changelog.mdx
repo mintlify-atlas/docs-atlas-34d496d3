@@ -1,0 +1,72 @@
+---
+title: "Changelog"
+description: "Release history for js-beautify, including bug fixes, new features, and dependency updates."
+---
+
+This page lists the most recent releases of js-beautify. For the complete history, see the [GitHub releases page](https://github.com/beautifier/js-beautify/releases).
+
+<AccordionGroup>
+  <Accordion title="v1.15.4">
+    - Downgrade nopt to v7.x to maintain Node.js v14 compatibility ([#2358](https://github.com/beautifier/js-beautify/issues/2358))
+  </Accordion>
+
+  <Accordion title="v1.15.3">
+    - Fix Node.js 18 support by downgrading glob to v10 ([#2350](https://github.com/beautifier/js-beautify/pull/2350))
+  </Accordion>
+
+  <Accordion title="v1.15.2">
+    - Patch SNYK-JS-CROSSSPAWN-8303230 issue brought in through old glob package ([#2328](https://github.com/beautifier/js-beautify/issues/2328))
+    - Release wheels on PyPI ([#2313](https://github.com/beautifier/js-beautify/issues/2313))
+    - Fix `ModuleNotFoundError: No module named 'setuptools.command.test'` with latest setuptools ([#2301](https://github.com/beautifier/js-beautify/issues/2301))
+    - Python: compatible with setuptools>=72 ([#2300](https://github.com/beautifier/js-beautify/issues/2300))
+  </Accordion>
+
+  <Accordion title="v1.15.1">
+    - Turn new Angular templating off by default in HTML ([#2247](https://github.com/beautifier/js-beautify/pull/2247))
+    - Fix performance regression introduced in v1.15.0 ([#2246](https://github.com/beautifier/js-beautify/issues/2246))
+  </Accordion>
+
+  <Accordion title="v1.15.0">
+    - Fixed formatting of new Angular control flow syntax ([#2221](https://github.com/beautifier/js-beautify/pull/2221))
+  </Accordion>
+
+  <Accordion title="v1.14.11">
+    - Fix broken editor at beautifier.io ([#2201](https://github.com/beautifier/js-beautify/issues/2201))
+    - Set Node.js minimum to v14 ([#2169](https://github.com/beautifier/js-beautify/pull/2169))
+    - Fix invalid prettification of object with Unicode escape character as object key ([#2159](https://github.com/beautifier/js-beautify/issues/2159))
+    - Fix invalid JSON being generated with `wrap_line_length` ([#1932](https://github.com/beautifier/js-beautify/issues/1932))
+  </Accordion>
+
+  <Accordion title="v1.14.9">
+    - Bump semver and editorconfig dependencies ([#2161](https://github.com/beautifier/js-beautify/pull/2161))
+    - Update editorconfig package ([#2160](https://github.com/beautifier/js-beautify/issues/2160))
+    - Allow configuring the "custom elements as inline elements" behavior ([#2113](https://github.com/beautifier/js-beautify/issues/2113))
+  </Accordion>
+
+  <Accordion title="v1.14.8">
+    - Require Node.js v12 or greater ([#2151](https://github.com/beautifier/js-beautify/pull/2151))
+    - CSS: `insideNonNestedAtRule` generic variable ([#2147](https://github.com/beautifier/js-beautify/pull/2147))
+    - Update dependencies ([#2145](https://github.com/beautifier/js-beautify/pull/2145))
+    - Fix CI build ([#2144](https://github.com/beautifier/js-beautify/pull/2144))
+    - Fixed theme toggle in `without_codemirror` mode ([#2138](https://github.com/beautifier/js-beautify/pull/2138))
+    - Use correct variable name ([#2135](https://github.com/beautifier/js-beautify/pull/2135))
+    - Fix a few typos in docs ([#2127](https://github.com/beautifier/js-beautify/pull/2127))
+    - Add support for new record types ([#2118](https://github.com/beautifier/js-beautify/pull/2118))
+    - Fix: semicolon followed by block statement doesn't have new line ([#2117](https://github.com/beautifier/js-beautify/pull/2117))
+    - Fix formatting related to the `<menu>` element ([#2114](https://github.com/beautifier/js-beautify/pull/2114))
+    - Fix issue prettifying `(function(){code();{code}})()` ([#1852](https://github.com/beautifier/js-beautify/issues/1852))
+  </Accordion>
+
+  <Accordion title="v1.14.7">
+    - Update web browser implementation examples in docs ([#2107](https://github.com/beautifier/js-beautify/pull/2107))
+    - Fix HTML formatter breaking layout by introducing newlines ([#1989](https://github.com/beautifier/js-beautify/issues/1989))
+  </Accordion>
+
+  <Accordion title="v1.14.6">
+    - Fix globs no longer working on Windows in v1.14.5 ([#2093](https://github.com/beautifier/js-beautify/issues/2093))
+  </Accordion>
+</AccordionGroup>
+
+<Info>
+  Showing the 10 most recent releases. For the full release history going back to v1.5.2, see the [CHANGELOG.md](https://github.com/beautifier/js-beautify/blob/main/CHANGELOG.md) in the repository or browse all [GitHub releases](https://github.com/beautifier/js-beautify/releases).
+</Info>

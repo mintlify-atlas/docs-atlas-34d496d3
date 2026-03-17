@@ -1,0 +1,88 @@
+---
+title: "css-beautify CLI"
+description: "Command-line interface for beautifying CSS files with js-beautify."
+---
+
+## Synopsis
+
+```bash
+css-beautify [options] <file ...>
+```
+
+The `css-beautify` command is installed alongside `js-beautify` when you install the package globally:
+
+```bash
+npm install -g js-beautify
+```
+
+Beautified output is written to stdout by default. You can also invoke the CSS beautifier via `js-beautify --type css`.
+
+<Note>
+  Pass `-` as a filename to read from stdin.
+</Note>
+
+## Options
+
+### I/O options
+
+| Flag | Long form | Description |
+|------|-----------|-------------|
+| `-f` | `--file` | Input file(s). Pass `-` for stdin. |
+| `-r` | `--replace` | Write output in-place, overwriting the input file. |
+| `-o` | `--outfile` | Write output to a specific file instead of stdout. |
+| | `--config` | Path to a JSON config file. |
+| `-q` | `--quiet` | Suppress logging to stdout. |
+| `-h` | `--help` | Show help and exit. |
+| `-v` | `--version` | Show the version number and exit. |
+
+### Indentation options
+
+| Flag | Long form | Default | Description |
+|------|-----------|---------|-------------|
+| `-s` | `--indent-size` | `4` | Number of spaces per indentation level. |
+| `-c` | `--indent-char` | `" "` | Character used for indentation. |
+| `-t` | `--indent-with-tabs` | `false` | Indent with tabs, overrides `-s` and `-c`. |
+| | `--indent-empty-lines` | `false` | Keep indentation on empty lines. |
+| | `--editorconfig` | `false` | Use EditorConfig to set options from `.editorconfig`. |
+
+### Output formatting
+
+| Flag | Long form | Default | Description |
+|------|-----------|---------|-------------|
+| `-e` | `--eol` | first newline in file, else `\n` | Line terminator character(s). |
+| `-n` | `--end-with-newline` | `false` | End output with a newline. |
+| `-b` | `--brace-style` | `collapse` | Brace placement: `collapse` (opening brace on same line as selector) or `expand` (opening brace on its own line). |
+| `-L` | `--selector-separator-newline` | `true` | Print each selector in a multi-selector rule on its own line. |
+| `-N` | `--newline-between-rules` | `true` | Add a blank line between CSS rules. |
+
+## Examples
+
+```bash
+# Beautify from stdin to stdout
+cat styles.min.css | css-beautify -
+
+# Beautify a file, output to stdout
+css-beautify styles.css
+
+# Replace the file in-place
+css-beautify --replace styles.css
+
+# Write to a new file with 2-space indentation
+css-beautify -s 2 -o dist/styles.formatted.css src/styles.css
+
+# Expand braces and end with a newline
+css-beautify --brace-style expand --end-with-newline styles.css
+
+# Disable newline between rules
+css-beautify --no-newline-between-rules styles.css
+
+# Disable selector separator newlines
+css-beautify --no-selector-separator-newline styles.css
+```
+
+<Tip>
+  You can also run the CSS beautifier via the main `js-beautify` command with the `--type css` flag:
+  ```bash
+  js-beautify --type css styles.css
+  ```
+</Tip>

@@ -1,0 +1,139 @@
+---
+title: "CLI Usage"
+description: "Beautify JavaScript, CSS, and HTML files from the command line using the js-beautify, css-beautify, and html-beautify executables."
+---
+
+## Installation
+
+Install the package globally to get the CLI executables on your `PATH`:
+
+```bash
+npm install --global js-beautify
+```
+
+## Executables
+
+Installing `js-beautify` globally provides three executables:
+
+| Executable | Purpose |
+|------------|--------|
+| `js-beautify` | Beautify JavaScript (also accepts `--type css` or `--type html`) |
+| `css-beautify` | Beautify CSS |
+| `html-beautify` | Beautify HTML |
+
+## Basic Usage
+
+Pass a file path as the argument. Beautified output is written to `stdout` by default.
+
+```bash
+js-beautify foo.js
+css-beautify styles.css
+html-beautify index.html
+```
+
+## Flags
+
+### Input and Output
+
+| Flag | Description |
+|------|-------------|
+| `-f, --file` | Input file (pass `-` to read from stdin) |
+| `-o, --outfile` | Write output to a file instead of stdout |
+| `-r, --replace` | Overwrite the input file in-place |
+| `--type [js\|css\|html]` | Select which beautifier to run (default: `js`) |
+| `--config` | Path to a JSON config file |
+| `-q, --quiet` | Suppress logging to stdout |
+
+### Formatting
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `-s, --indent-size` | `4` | Number of spaces per indentation level |
+| `-c, --indent-char` | `" "` | Character to use for indentation |
+| `-t, --indent-with-tabs` | — | Indent with tabs (overrides `-s` and `-c`) |
+| `-e, --eol` | `"\n"` | Line terminator character(s) |
+| `-n, --end-with-newline` | — | End the output with a newline |
+| `-b, --brace-style` | `collapse` | Brace placement (`collapse\|expand\|end-expand\|none`) |
+| `-w, --wrap-line-length` | `0` | Wrap lines exceeding N characters |
+| `-p, --preserve-newlines` | — | Preserve existing line breaks |
+| `-m, --max-preserve-newlines` | `10` | Max blank lines to preserve in one chunk |
+
+## Examples
+
+### Write output to a new file
+
+```bash
+js-beautify foo.js -o foo.pretty.js
+```
+
+### Overwrite a file in-place
+
+```bash
+js-beautify -r foo.js
+```
+
+<Warning>
+The `-r` / `--replace` flag overwrites the original file with no confirmation. Make sure your file is tracked in version control before using it.
+</Warning>
+
+### Read from stdin (pipe)
+
+Pass `-` as the filename to read from stdin:
+
+```bash
+cat foo.js | js-beautify -
+```
+
+```bash
+echo 'function x(){return 1;}' | js-beautify -f - -s 2
+```
+
+### Set indent size
+
+```bash
+js-beautify -s 2 foo.js
+css-beautify -s 2 styles.css
+```
+
+### Use a config file
+
+```bash
+js-beautify --config .jsbeautifyrc foo.js
+```
+
+### Force a specific beautifier type
+
+`js-beautify` defaults to JavaScript. Use `--type` to run a different beautifier:
+
+```bash
+js-beautify --type css styles.css
+js-beautify --type html index.html
+```
+
+## npm Scripts Integration
+
+You can integrate `js-beautify` into your build process via `package.json` scripts. Because `npm` adds local `node_modules/.bin` to `PATH`, you don't need a global install.
+
+```json
+{
+  "scripts": {
+    "format": "js-beautify -r src/**/*.js",
+    "format:css": "css-beautify -r src/**/*.css",
+    "format:html": "html-beautify -r src/**/*.html"
+  }
+}
+```
+
+```bash
+npm run format
+```
+
+## Configuration Sources
+
+<Tip>
+You can configure the CLI without passing flags every time. The JS executable loads settings from the following sources, in order of precedence (earlier sources override later ones):
+
+1. Any `jsbeautify_`-prefixed environment variables
+2. A JSON file passed via `--config`
+3. A `.jsbeautifyrc` file found at or above the current working directory
+</Tip>

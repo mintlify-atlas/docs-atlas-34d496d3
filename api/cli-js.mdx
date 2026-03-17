@@ -1,0 +1,127 @@
+---
+title: "js-beautify CLI"
+description: "Command-line interface for beautifying JavaScript files with js-beautify."
+---
+
+## Synopsis
+
+```bash
+js-beautify [options] <file ...>
+```
+
+When installed globally (`npm install -g js-beautify`), the `js-beautify` executable is available on your PATH. Beautified output is written to stdout by default.
+
+<Note>
+  Pass `-` as a filename to read from stdin. When no files are provided and no stdin pipe is detected, the CLI prints an error and usage information.
+</Note>
+
+## Options
+
+### I/O options
+
+| Flag | Long form | Description |
+|------|-----------|-------------|
+| `-f` | `--file` | Input file(s). Pass `-` for stdin. |
+| `-r` | `--replace` | Write output in-place, overwriting the input file. |
+| `-o` | `--outfile` | Write output to a specific file instead of stdout. |
+| | `--config` | Path to a JSON config file. |
+| | `--type` | Select beautifier type: `js`, `css`, or `html`. Does not filter input files — only selects which beautifier to run. Default: `js`. |
+| `-q` | `--quiet` | Suppress logging to stdout. |
+| `-h` | `--help` | Show help and exit. |
+| `-v` | `--version` | Show the version number and exit. |
+
+### Indentation options
+
+| Flag | Long form | Default | Description |
+|------|-----------|---------|-------------|
+| `-s` | `--indent-size` | `4` | Number of spaces per indentation level. |
+| `-c` | `--indent-char` | `" "` | Character used for indentation. |
+| `-t` | `--indent-with-tabs` | `false` | Indent with tabs, overrides `-s` and `-c`. |
+| `-l` | `--indent-level` | `0` | Initial indentation level. |
+| | `--indent-empty-lines` | `false` | Keep indentation on empty lines. |
+| | `--editorconfig` | `false` | Use EditorConfig to set up options from `.editorconfig`. |
+
+### Output formatting
+
+| Flag | Long form | Default | Description |
+|------|-----------|---------|-------------|
+| `-e` | `--eol` | first newline in file, else `\n` | Line terminator character(s). |
+| `-n` | `--end-with-newline` | `false` | End output with a newline. |
+| `-p` | `--preserve-newlines` | `true` | Preserve existing line breaks. Use `--no-preserve-newlines` to disable. |
+| `-m` | `--max-preserve-newlines` | `10` | Maximum blank lines to preserve in one chunk. |
+| `-w` | `--wrap-line-length` | `0` | Wrap lines exceeding N characters. `0` disables wrapping. |
+| `-b` | `--brace-style` | `collapse` | Brace style: `collapse`, `expand`, `end-expand`, `none`. Append `,preserve-inline` to keep single-line blocks. |
+| `-C` | `--comma-first` | `false` | Place commas at the start of new lines instead of the end. |
+| `-O` | `--operator-position` | `before-newline` | Operator position on wrapped lines: `before-newline`, `after-newline`, `preserve-newline`. |
+| | `--templating` | `auto` | Templating languages to recognize: `auto`, `none`, `django`, `erb`, `handlebars`, `php`, `smarty`, `angular`. |
+
+### Space options
+
+| Flag | Long form | Default | Description |
+|------|-----------|---------|-------------|
+| `-P` | `--space-in-paren` | `false` | Add padding spaces inside parentheses: `f( a, b )`. |
+| `-E` | `--space-in-empty-paren` | `false` | Add a space inside empty parentheses: `f( )`. |
+| `-j` | `--jslint-happy` | `false` | Enable JSLint-stricter mode. Implies `--space-after-anon-function`. |
+| `-a` | `--space-after-anon-function` | `false` | Add a space before anonymous function parens: `function ()`. |
+| | `--space-after-named-function` | `false` | Add a space before named function parens: `function example ()`. |
+
+### Method chaining
+
+| Flag | Long form | Default | Description |
+|------|-----------|---------|-------------|
+| `-u` | `--unindent-chained-methods` | `false` | Do not indent chained method calls. |
+| `-B` | `--break-chained-methods` | `false` | Break chained method calls onto separate lines. |
+
+### Miscellaneous
+
+| Flag | Long form | Default | Description |
+|------|-----------|---------|-------------|
+| `-k` | `--keep-array-indentation` | `false` | Preserve original array indentation. |
+| `-x` | `--unescape-strings` | `false` | Decode printable characters encoded in `\xNN` notation. |
+| `-X` | `--e4x` | `false` | Pass E4X XML literals through untouched. |
+
+## Examples
+
+```bash
+# Beautify from stdin to stdout
+echo 'function foo(){return 42;}' | js-beautify -
+
+# Beautify a file, output to stdout
+js-beautify app.js
+
+# Beautify multiple files to stdout
+js-beautify src/*.js
+
+# Replace files in-place
+js-beautify --replace src/main.js src/utils.js
+
+# Write beautified output to a new file
+js-beautify -o dist/formatted.js src/main.js
+
+# Use 2-space indentation and end with a newline
+js-beautify -s 2 -n app.js
+
+# Indent with tabs, expand braces
+js-beautify --indent-with-tabs --brace-style expand app.js
+
+# Use a config file
+js-beautify --config .jsbeautifyrc app.js
+
+# Pipe from another tool
+cat bundle.min.js | js-beautify --stdin -s 2 > bundle.formatted.js
+```
+
+<Tip>
+  You can also use `js-beautify --css` or `js-beautify --html` as an alternative to the `css-beautify` and `html-beautify` commands. The `--type` flag selects the beautifier without filtering input files.
+</Tip>
+
+## Configuration loading
+
+The CLI resolves options from the following sources in priority order (highest to lowest):
+
+1. CLI flags passed directly
+2. `jsbeautify_`-prefixed environment variables
+3. A JSON config file specified via `--config`
+4. A `.jsbeautifyrc` JSON file found at or above the current working directory
+
+Option names in `.jsbeautifyrc` use underscores instead of dashes, matching the library API names.

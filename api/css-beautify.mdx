@@ -1,0 +1,146 @@
+---
+title: "css_beautify() / beautify.css()"
+description: "Beautify and reformat CSS source code using the js-beautify Node.js API."
+---
+
+## Overview
+
+The CSS beautifier is available as a named export from the `js-beautify` package:
+
+```javascript
+const beautify = require('js-beautify').css;
+const beautify = require('js-beautify').css_beautify; // legacy alias
+```
+
+For ESM imports:
+
+```javascript
+import beautify from 'js-beautify';
+
+beautify.css(code, options);
+```
+
+## Function signature
+
+```typescript
+beautify.css(sourceCode: string, options?: object): string
+```
+
+## Parameters
+
+<ParamField path="sourceCode" type="string" required>
+  The CSS source code string to beautify.
+</ParamField>
+
+<ParamField path="options" type="object">
+  Configuration options object. All keys use underscores.
+
+  <Expandable title="options">
+    <ParamField path="indent_size" type="number" default="4">
+      Number of spaces per indentation level.
+    </ParamField>
+
+    <ParamField path="indent_char" type="string" default=" ">
+      Character used for indentation. Overridden to `\t` when `indent_with_tabs` is `true`.
+    </ParamField>
+
+    <ParamField path="indent_with_tabs" type="boolean" default="false">
+      Indent with tabs instead of spaces.
+    </ParamField>
+
+    <ParamField path="eol" type="string" default="\n">
+      Line terminator character(s). Use `\r\n` for Windows-style endings, or `auto` to detect from input.
+    </ParamField>
+
+    <ParamField path="end_with_newline" type="boolean" default="false">
+      Ensure the output ends with a newline character.
+    </ParamField>
+
+    <ParamField path="brace_style" type="string" default="collapse">
+      Controls brace placement. CSS supports `collapse` and `expand`. `collapse` keeps the opening brace on the same line as the selector; `expand` places it on its own line.
+    </ParamField>
+
+    <ParamField path="selector_separator_newline" type="boolean" default="true">
+      Print each selector in a multi-selector rule on its own line.
+    </ParamField>
+
+    <ParamField path="newline_between_rules" type="boolean" default="true">
+      Add an empty line between CSS rules.
+    </ParamField>
+
+    <ParamField path="space_around_combinator" type="boolean" default="false">
+      Add spaces around CSS combinators such as `>`, `~`, and `+`.
+    </ParamField>
+
+    <ParamField path="indent_empty_lines" type="boolean" default="false">
+      Keep indentation whitespace on otherwise empty lines.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Return value
+
+<ResponseField name="result" type="string">
+  The beautified CSS source code as a string.
+</ResponseField>
+
+## Examples
+
+<CodeGroup>
+
+```javascript CommonJS
+const beautifyCss = require('js-beautify').css;
+
+const ugly = '.container{display:flex;flex-direction:row;}.item{color:red;margin:0}';
+
+const pretty = beautifyCss(ugly, {
+  indent_size: 2,
+  selector_separator_newline: true,
+});
+
+console.log(pretty);
+// .container {
+//   display: flex;
+//   flex-direction: row;
+// }
+//
+// .item {
+//   color: red;
+//   margin: 0
+// }
+```
+
+```javascript ESM
+import beautify from 'js-beautify';
+import { readFileSync } from 'fs';
+
+const source = readFileSync('styles.min.css', 'utf8');
+
+const formatted = beautify.css(source, {
+  indent_size: 4,
+  end_with_newline: true,
+  newline_between_rules: true,
+});
+
+process.stdout.write(formatted);
+```
+
+</CodeGroup>
+
+<Note>
+  The CSS beautifier is simpler in scope than the JavaScript beautifier and has fewer options. For HTML and JavaScript inside CSS (e.g., in `<style>` blocks), use the HTML beautifier with embedded language support.
+</Note>
+
+## Language-specific overrides
+
+When loading from `.jsbeautifyrc`, you can scope CSS settings under the `css` key:
+
+```json
+{
+  "indent_size": 4,
+  "css": {
+    "indent_size": 2,
+    "newline_between_rules": true
+  }
+}
+```

@@ -1,0 +1,195 @@
+---
+title: "cssbeautifier (Python)"
+description: "Beautify CSS source code from Python using the cssbeautifier library."
+---
+
+## Installation
+
+```bash
+pip install cssbeautifier
+```
+
+The `cssbeautifier` package is separate from `jsbeautifier`. You need to install it independently even if you already have `jsbeautifier` installed.
+
+<Note>
+  `cssbeautifier` depends on `jsbeautifier` internally and will install it as a dependency automatically.
+</Note>
+
+## Module
+
+```python
+import cssbeautifier
+```
+
+## Functions
+
+### `beautify()`
+
+Beautify a CSS source string.
+
+```python
+cssbeautifier.beautify(source: str, opts=None) -> str
+```
+
+<ParamField path="source" type="str" required>
+  The CSS source code string to beautify.
+</ParamField>
+
+<ParamField path="opts" type="BeautifierOptions">
+  An options object returned by `default_options()`. If omitted, default options are used.
+</ParamField>
+
+<ResponseField name="result" type="str">
+  The beautified CSS source code.
+</ResponseField>
+
+---
+
+### `beautify_file()`
+
+Read a CSS file and return beautified output as a string.
+
+```python
+cssbeautifier.beautify_file(file_name: str, opts=None) -> str
+```
+
+<ParamField path="file_name" type="str" required>
+  Path to the CSS file. Pass `"-"` to read from stdin.
+</ParamField>
+
+<ParamField path="opts" type="BeautifierOptions">
+  An options object returned by `default_options()`.
+</ParamField>
+
+<ResponseField name="result" type="str">
+  The beautified CSS source code.
+</ResponseField>
+
+---
+
+### `default_options()`
+
+Return a `BeautifierOptions` instance populated with default values.
+
+```python
+cssbeautifier.default_options() -> BeautifierOptions
+```
+
+<ResponseField name="result" type="BeautifierOptions">
+  A `BeautifierOptions` object. Mutate its attributes before passing to `beautify()` or `beautify_file()`.
+</ResponseField>
+
+## `BeautifierOptions` attributes
+
+<Expandable title="attributes">
+  <ParamField path="indent_size" type="int" default="4">
+    Number of spaces per indentation level.
+  </ParamField>
+
+  <ParamField path="indent_char" type="str" default=" ">
+    Character used for indentation.
+  </ParamField>
+
+  <ParamField path="indent_with_tabs" type="bool" default="False">
+    Indent with tabs instead of spaces.
+  </ParamField>
+
+  <ParamField path="eol" type="str" default="\n">
+    Line terminator character(s).
+  </ParamField>
+
+  <ParamField path="end_with_newline" type="bool" default="False">
+    Ensure the output ends with a newline.
+  </ParamField>
+
+  <ParamField path="brace_style" type="str" default="collapse">
+    Brace placement: `collapse` (opening brace on same line as selector) or `expand` (opening brace on its own line).
+  </ParamField>
+
+  <ParamField path="selector_separator_newline" type="bool" default="True">
+    Print each selector in a multi-selector rule on its own line.
+  </ParamField>
+
+  <ParamField path="newline_between_rules" type="bool" default="True">
+    Add a blank line between CSS rules.
+  </ParamField>
+
+  <ParamField path="space_around_combinator" type="bool" default="False">
+    Add spaces around CSS combinators such as `>`, `~`, and `+`.
+  </ParamField>
+
+  <ParamField path="indent_empty_lines" type="bool" default="False">
+    Keep indentation whitespace on otherwise empty lines.
+  </ParamField>
+</Expandable>
+
+## Examples
+
+```python
+import cssbeautifier
+
+# Beautify with default options
+result = cssbeautifier.beautify('.container{display:flex;}.item{color:red;}')
+print(result)
+# .container {
+#     display: flex;
+# }
+#
+# .item {
+#     color: red;
+# }
+
+# Beautify with custom options
+opts = cssbeautifier.default_options()
+opts.indent_size = 2
+opts.end_with_newline = True
+opts.newline_between_rules = True
+
+result = cssbeautifier.beautify(
+    'h1,h2,h3{font-weight:bold;margin:0}',
+    opts
+)
+print(result)
+# h1,
+# h2,
+# h3 {
+#   font-weight: bold;
+#   margin: 0
+# }
+
+# Beautify a file
+result = cssbeautifier.beautify_file('styles.min.css')
+with open('styles.css', 'w') as f:
+    f.write(result)
+
+# Read from stdin
+import sys
+result = cssbeautifier.beautify_file('-')  # reads from stdin
+sys.stdout.write(result)
+```
+
+## CLI (Python)
+
+The `cssbeautifier` package also installs a `css-beautify` command:
+
+```bash
+# Beautify a file
+css-beautify styles.min.css
+
+# Specify options
+css-beautify -s 2 --end-with-newline styles.min.css
+
+# Replace in-place
+css-beautify -r styles.min.css
+
+# Write to a specific output file
+css-beautify -o styles.css styles.min.css
+
+# Disable newline between rules
+css-beautify --disable-newline-between-rules styles.css
+
+# Add spaces around combinators
+css-beautify --space-around-combinator styles.css
+```
+
+Run `css-beautify --help` for a full list of CLI flags.

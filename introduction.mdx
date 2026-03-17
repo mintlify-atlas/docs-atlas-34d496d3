@@ -1,0 +1,53 @@
+---
+title: "Introduction"
+description: "JS Beautify is an open-source formatter for JavaScript, CSS, and HTML — available as a Node.js library, CLI tool, Python package, and web library."
+---
+
+JS Beautify reformats and re-indents JavaScript, CSS, and HTML. It unpacks scripts packed by Dean Edwards' packer, and partly deobfuscates scripts processed by [javascript-obfuscator](https://github.com/javascript-obfuscator/javascript-obfuscator). You can use it in the browser at [beautifier.io](https://beautifier.io/), from the command line, or as a library in your Node.js or Python project.
+
+## Key features
+
+<CardGroup cols={2}>
+  <Card title="JS, CSS, and HTML" icon="code">
+    Beautify all three languages from a single package. Dedicated `js-beautify`, `css-beautify`, and `html-beautify` executables are included, or call each formatter programmatically.
+  </Card>
+  <Card title="40+ configuration options" icon="sliders">
+    Control indentation size and character, brace style, line wrapping, operator position, comma placement, and more. Options are consistent across the CLI and library APIs.
+  </Card>
+  <Card title="EditorConfig support" icon="file-code">
+    Pass `--editorconfig` to read indent style, indent size, and end-of-line settings directly from your project's `.editorconfig` file.
+  </Card>
+  <Card title="Templating language support" icon="brackets-curly">
+    Preserve template syntax from Django, ERB, Handlebars, PHP, Smarty, and Angular inside HTML files. Use `--templating auto` to detect automatically.
+  </Card>
+  <Card title="In-source directives" icon="terminal">
+    Use `/* beautify ignore:start */` and `/* beautify ignore:end */` comments to exclude sections from formatting, or `preserve:start` / `preserve:end` to keep existing formatting in JavaScript and HTML.
+  </Card>
+  <Card title="Config file (.jsbeautifyrc)" icon="gear">
+    Store your project settings in a `.jsbeautifyrc` JSON file at any level of the directory tree. Settings support language-specific overrides for `js`, `css`, and `html` blocks.
+  </Card>
+</CardGroup>
+
+## Available runtimes
+
+| Runtime | Package | Languages |
+|---|---|---|
+| Node.js (library + CLI) | `npm install js-beautify` | JS, CSS, HTML |
+| Python (library + CLI) | `pip install jsbeautifier` | JS only |
+| Python CSS | `pip install cssbeautifier` | CSS only |
+| Web / CDN | cdnjs script tags | JS, CSS, HTML |
+
+## Get started
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Install JS Beautify for Node.js, Python, or as a web library via CDN.
+  </Card>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Beautify your first file in under two minutes using the CLI or library API.
+  </Card>
+</CardGroup>
+
+## Getting help
+
+Report bugs and request features on the [GitHub issue tracker](https://github.com/beautifier/js-beautify/issues). Before opening a new issue, search existing issues to avoid duplicates.

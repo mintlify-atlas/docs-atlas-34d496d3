@@ -1,0 +1,271 @@
+---
+title: "Configuration Options"
+description: "Complete reference for all JS Beautify options across JavaScript, CSS, and HTML beautifiers."
+---
+
+JS Beautify options follow a consistent naming convention: CLI flags use dashes (e.g., `--indent-size`), while the library API and config files use underscores (e.g., `indent_size`). The two forms are interchangeable — the option parser normalizes dashes to underscores internally.
+
+```bash
+# CLI: dashes
+js-beautify --indent-size 2 --end-with-newline foo.js
+```
+
+```javascript
+// Library: underscores
+beautify.js(code, { indent_size: 2, end_with_newline: true });
+```
+
+## Common options
+
+These options apply to all three beautifiers (JavaScript, CSS, and HTML).
+
+<ParamField path="indent_size" type="number" default="4">
+  Number of spaces per indentation level. Overridden by `indent_with_tabs`.
+</ParamField>
+
+<ParamField path="indent_char" type="string" default='" "'>
+  Character used for indentation. Defaults to a single space. Set to `"\t"` or use `indent_with_tabs` instead.
+</ParamField>
+
+<ParamField path="indent_with_tabs" type="boolean" default="false">
+  Indent with tab characters instead of spaces. When `true`, overrides `indent_size` and sets `indent_char` to `"\t"`. If `indent_size` is `1` when this is enabled, it resets to `4`.
+</ParamField>
+
+<ParamField path="eol" type="string" default='"auto"'>
+  Line terminator sequence. Defaults to `"auto"`, which uses the first newline found in the file, or `"\n"` if none is found. Accepts `"\n"`, `"\r\n"`, or `"\r"`.
+</ParamField>
+
+<ParamField path="end_with_newline" type="boolean" default="false">
+  Append a newline at the end of the output.
+</ParamField>
+
+<ParamField path="editorconfig" type="boolean" default="false">
+  Read indentation and line-ending settings from the nearest `.editorconfig` file. Explicit options passed alongside this flag take precedence. See [EditorConfig Integration](/configuration/editorconfig).
+</ParamField>
+
+<ParamField path="indent_empty_lines" type="boolean" default="false">
+  Preserve indentation whitespace on otherwise empty lines. By default, empty lines are left with no leading whitespace.
+</ParamField>
+
+## JavaScript options
+
+These options are recognized only by the JavaScript beautifier.
+
+### Defaults
+
+```json
+{
+    "indent_size": 4,
+    "indent_char": " ",
+    "indent_with_tabs": false,
+    "editorconfig": false,
+    "eol": "\n",
+    "end_with_newline": false,
+    "indent_level": 0,
+    "preserve_newlines": true,
+    "max_preserve_newlines": 10,
+    "space_in_paren": false,
+    "space_in_empty_paren": false,
+    "jslint_happy": false,
+    "space_after_anon_function": false,
+    "space_after_named_function": false,
+    "brace_style": "collapse",
+    "unindent_chained_methods": false,
+    "break_chained_methods": false,
+    "keep_array_indentation": false,
+    "unescape_strings": false,
+    "wrap_line_length": 0,
+    "e4x": false,
+    "comma_first": false,
+    "operator_position": "before-newline",
+    "indent_empty_lines": false,
+    "templating": ["auto"],
+    "eval_code": false,
+    "space_before_conditional": true
+}
+```
+
+<Note>
+  `eval_code` and `space_before_conditional` are not exposed as CLI flags. They can only be set via the library API or a config file.
+</Note>
+
+### Option reference
+
+<ParamField path="indent_level" type="number" default="0">
+  Initial indentation level applied before beautification begins. Useful when embedding beautified output inside another structure.
+</ParamField>
+
+<ParamField path="preserve_newlines" type="boolean" default="true">
+  Keep existing blank lines in the source. Pass `--no-preserve-newlines` on the CLI to disable.
+</ParamField>
+
+<ParamField path="max_preserve_newlines" type="number" default="10">
+  Maximum number of consecutive blank lines to preserve in one place. Has no effect when `preserve_newlines` is `false`.
+</ParamField>
+
+<ParamField path="space_in_paren" type="boolean" default="false">
+  Add padding spaces inside parentheses: `f( a, b )` instead of `f(a, b)`.
+</ParamField>
+
+<ParamField path="space_in_empty_paren" type="boolean" default="false">
+  Add a single space inside empty parentheses: `f( )` instead of `f()`.
+</ParamField>
+
+<ParamField path="jslint_happy" type="boolean" default="false">
+  Enable jslint-compatible output. When `true`, forces `space_after_anon_function` to `true` as well.
+</ParamField>
+
+<ParamField path="space_after_anon_function" type="boolean" default="false">
+  Add a space between the `function` keyword and the opening parenthesis of anonymous functions: `function ()` instead of `function()`.
+</ParamField>
+
+<ParamField path="space_after_named_function" type="boolean" default="false">
+  Add a space between the `function` keyword and the opening parenthesis of named functions: `function example ()` instead of `function example()`.
+</ParamField>
+
+<ParamField path="brace_style" type="string" default='"collapse"'>
+  Controls placement of curly braces. Accepted values:
+
+  - `collapse` — Opening brace on same line as control statement (K&R style).
+  - `expand` — Opening brace on its own line (Allman style).
+  - `end-expand` — Opening brace on same line, closing brace on its own line.
+  - `none` — Leave brace placement as-is.
+
+  Append `,preserve-inline` to any value to keep single-line blocks on one line: `"collapse,preserve-inline"`.
+</ParamField>
+
+<ParamField path="unindent_chained_methods" type="boolean" default="false">
+  Do not add extra indentation for chained method calls.
+</ParamField>
+
+<ParamField path="break_chained_methods" type="boolean" default="false">
+  Place each chained method call on its own line.
+</ParamField>
+
+<ParamField path="keep_array_indentation" type="boolean" default="false">
+  Preserve the original indentation of array elements.
+</ParamField>
+
+<ParamField path="unescape_strings" type="boolean" default="false">
+  Decode printable ASCII characters encoded in `\xNN` notation back to their literal form.
+</ParamField>
+
+<ParamField path="wrap_line_length" type="number" default="0">
+  Wrap lines that exceed this number of characters. `0` disables wrapping.
+</ParamField>
+
+<ParamField path="e4x" type="boolean" default="false">
+  Pass E4X XML literals through the beautifier unchanged.
+</ParamField>
+
+<ParamField path="comma_first" type="boolean" default="false">
+  Place commas at the beginning of each new line rather than at the end.
+</ParamField>
+
+<ParamField path="operator_position" type="string" default='"before-newline"'>
+  Where to place binary operators when a line breaks. Accepted values:
+  - `before-newline` — Operator stays at the end of the upper line.
+  - `after-newline` — Operator moves to the beginning of the lower line.
+  - `preserve-newline` — Keep the operator wherever it appears in the source.
+</ParamField>
+
+<ParamField path="templating" type="string[]" default='["auto"]'>
+  List of templating languages whose syntax should be preserved. Accepted values: `auto`, `none`, `angular`, `django`, `erb`, `handlebars`, `php`, `smarty`. `auto` means no templating in JavaScript mode.
+</ParamField>
+
+<ParamField path="eval_code" type="boolean" default="false">
+  Attempt to beautify code passed to `eval()`. Not exposed as a CLI flag.
+</ParamField>
+
+<ParamField path="space_before_conditional" type="boolean" default="true">
+  Add a space before conditional statements (`if`, `for`, etc.). Not exposed as a CLI flag.
+</ParamField>
+
+## CSS options
+
+<ParamField path="brace_style" type="string" default='"collapse"'>
+  Controls placement of curly braces. Only `collapse` and `expand` are implemented for CSS.
+  - `collapse` — Opening brace on same line as selector.
+  - `expand` — Opening brace on its own line.
+</ParamField>
+
+<ParamField path="selector_separator_newline" type="boolean" default="true">
+  Place each selector in a comma-separated list on its own line.
+</ParamField>
+
+<ParamField path="newline_between_rules" type="boolean" default="true">
+  Add a blank line between CSS rule blocks.
+</ParamField>
+
+<ParamField path="space_around_combinator" type="boolean" default="false">
+  Add spaces around combinator characters (`>`, `+`, `~`). Also settable via the legacy `space_around_selector_separator`.
+</ParamField>
+
+## HTML options
+
+<ParamField path="indent_inner_html" type="boolean" default="false">
+  Indent the contents of `<head>` and `<body>` tags.
+</ParamField>
+
+<ParamField path="indent_body_inner_html" type="boolean" default="true">
+  Indent the contents of the `<body>` tag.
+</ParamField>
+
+<ParamField path="indent_head_inner_html" type="boolean" default="true">
+  Indent the contents of the `<head>` tag.
+</ParamField>
+
+<ParamField path="indent_scripts" type="string" default='"normal"'>
+  How to handle indentation of content inside `<script>` tags. Accepted values: `normal`, `keep`, `separate`.
+</ParamField>
+
+<ParamField path="wrap_line_length" type="number" default="250">
+  Maximum characters per line for HTML output. `0` disables wrapping.
+</ParamField>
+
+<ParamField path="wrap_attributes" type="string" default='"auto"'>
+  How to wrap HTML tag attributes when a tag is long. Accepted values:
+  - `auto` — Only wrap when the line exceeds `wrap_line_length`.
+  - `force` — Wrap each attribute onto its own line.
+  - `force-aligned` — Wrap and align attributes to the first attribute.
+  - `force-expand-multiline` — Wrap each attribute, including the first.
+  - `aligned-multiple` — Align multiple attributes per line.
+  - `preserve` — Preserve existing line breaks in attributes.
+  - `preserve-aligned` — Preserve and align to the first attribute.
+</ParamField>
+
+<ParamField path="wrap_attributes_min_attrs" type="number" default="2">
+  Minimum number of attributes required before forced wrapping applies (used with `force` wrap modes).
+</ParamField>
+
+<ParamField path="wrap_attributes_indent_size" type="number" default="indent_size">
+  Number of characters to indent wrapped attributes. Defaults to `indent_size`. Ignored when `wrap_attributes` is `"aligned"`.
+</ParamField>
+
+<ParamField path="inline" type="string[]">
+  List of tag names treated as inline elements. These are not forced onto new lines. Defaults to the full set of HTML inline elements (`a`, `abbr`, `b`, `br`, `code`, `em`, `img`, `input`, `span`, etc.).
+</ParamField>
+
+<ParamField path="inline_custom_elements" type="boolean" default="true">
+  Treat custom elements (e.g. `<my-component>`) as inline elements.
+</ParamField>
+
+<ParamField path="unformatted" type="string[]" default="[]">
+  List of tag names whose opening tags, content, and closing tags are left completely unchanged.
+</ParamField>
+
+<ParamField path="content_unformatted" type="string[]" default='["pre", "textarea"]'>
+  List of tag names whose inner content is preserved as-is, but whose tags themselves are still formatted.
+</ParamField>
+
+<ParamField path="unformatted_content_delimiter" type="string" default='""'>
+  Keep all text content between occurrences of this string on one line.
+</ParamField>
+
+<ParamField path="extra_liners" type="string[]" default='["head", "body", "/html"]'>
+  List of tags that should be preceded by an extra blank line.
+</ParamField>
+
+<ParamField path="templating" type="string[]" default='["auto"]'>
+  Templating languages to preserve. In HTML mode, `auto` enables `django`, `erb`, `handlebars`, and `php` by default.
+</ParamField>

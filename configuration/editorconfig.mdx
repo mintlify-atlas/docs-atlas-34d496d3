@@ -1,0 +1,93 @@
+---
+title: "EditorConfig Integration"
+description: "Use an .editorconfig file to drive JS Beautify indentation and line-ending settings automatically."
+---
+
+JS Beautify can read indentation and line-ending settings from an `.editorconfig` file. Enable this with the `--editorconfig` CLI flag or the `editorconfig: true` option in your config.
+
+## Supported properties
+
+When EditorConfig integration is active, JS Beautify reads the following `.editorconfig` properties and maps them to its own options:
+
+| EditorConfig property | JS Beautify option | Notes |
+|---|---|---|
+| `indent_style` | `indent_with_tabs` / `indent_char` | `tab` sets `indent_with_tabs: true`; `space` uses spaces |
+| `indent_size` | `indent_size` | |
+| `tab_width` | `indent_size` | Used when `indent_style = tab` |
+| `end_of_line` | `eol` | `lf` → `"\n"`, `crlf` → `"\r\n"`, `cr` → `"\r"` |
+| `insert_final_newline` | `end_with_newline` | `true` / `false` |
+
+<Note>
+  Any option you pass explicitly alongside `--editorconfig` takes precedence over what EditorConfig specifies. EditorConfig values fill in where you have not provided an explicit override.
+</Note>
+
+## Example .editorconfig
+
+```ini
+# .editorconfig
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+[*.js]
+indent_size = 4
+
+[Makefile]
+indent_style = tab
+```
+
+With this file present and EditorConfig enabled, JS files use 4-space indentation and all output ends with a newline.
+
+## CLI usage
+
+Pass the `--editorconfig` flag to activate EditorConfig lookup:
+
+```bash
+js-beautify --editorconfig foo.js
+```
+
+You can still override individual properties on the same command line:
+
+```bash
+# Use EditorConfig settings but force 2-space indentation
+js-beautify --editorconfig --indent-size 2 foo.js
+```
+
+## Library usage
+
+Set `editorconfig: true` in the options object:
+
+```javascript
+var beautify = require('js-beautify');
+
+var result = beautify.js(code, {
+  editorconfig: true
+});
+```
+
+You can combine it with explicit options — explicit values win:
+
+```javascript
+var result = beautify.js(code, {
+  editorconfig: true,
+  indent_size: 2        // overrides any indent_size from .editorconfig
+});
+```
+
+ESM import:
+
+```javascript
+import beautify from 'js-beautify';
+
+const result = beautify.html(source, { editorconfig: true });
+```
+
+## Python note
+
+The Python `jsbeautifier` package exposes an `editorconfig` option on its options object, but `.editorconfig` file lookup and the `--editorconfig` CLI flag are supported in the JavaScript implementation. Verify against the installed Python package version if you need this feature there.

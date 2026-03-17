@@ -1,0 +1,298 @@
+---
+title: "HTML Beautifier"
+description: "Reformat HTML documents and handle embedded JavaScript and CSS with html_beautify."
+---
+
+The HTML beautifier reformats HTML source code into consistently indented, readable output. It also beautifies embedded `<script>` and `<style>` blocks using the JavaScript and CSS beautifiers, respecting any options you provide for those languages.
+
+## Before and after
+
+<CodeGroup>
+
+```html before.html
+<!DOCTYPE html><html><head><title>Page</title><style>body{margin:0;color:#333}</style></head><body><div class="container"><h1>Hello</h1><p>This is a paragraph with <a href="/about">a link</a> and some text.</p></div><script>var x=1;function init(){console.log('ready');}</script></body></html>
+```
+
+```html after.html
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Page</title>
+    <style>
+        body {
+            margin: 0;
+            color: #333
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Hello</h1>
+        <p>This is a paragraph with <a href="/about">a link</a> and some text.</p>
+    </div>
+    <script>
+        var x = 1;
+
+        function init() {
+            console.log('ready');
+        }
+    </script>
+</body>
+
+</html>
+```
+
+</CodeGroup>
+
+## Key options
+
+### `indent_inner_html`
+
+When `true`, indents the content of `<head>` and `<body>` tags. Defaults to `false`.
+
+<Tabs>
+  <Tab title="indent_inner_html: false (default)">
+    ```html
+    <html>
+    <head>
+        <title>Page</title>
+    </head>
+    <body>
+        <p>Content</p>
+    </body>
+    </html>
+    ```
+  </Tab>
+  <Tab title="indent_inner_html: true">
+    ```html
+    <html>
+        <head>
+            <title>Page</title>
+        </head>
+        <body>
+            <p>Content</p>
+        </body>
+    </html>
+    ```
+  </Tab>
+</Tabs>
+
+### `indent_scripts`
+
+Controls the indentation level of code inside `<script>` tags.
+
+| Value | Description |
+| --- | --- |
+| `normal` | Script content is indented relative to the `<script>` tag (default) |
+| `keep` | Script content keeps its own indentation level |
+| `separate` | Script content starts at zero indentation |
+
+<Tabs>
+  <Tab title="normal (default)">
+    ```html
+    <body>
+        <script>
+            var x = 1;
+            function init() {}
+        </script>
+    </body>
+    ```
+  </Tab>
+  <Tab title="keep">
+    ```html
+    <body>
+        <script>
+        var x = 1;
+        function init() {}
+        </script>
+    </body>
+    ```
+  </Tab>
+  <Tab title="separate">
+    ```html
+    <body>
+        <script>
+var x = 1;
+function init() {}
+        </script>
+    </body>
+    ```
+  </Tab>
+</Tabs>
+
+### `wrap_line_length`
+
+Sets a maximum number of characters per line. Lines exceeding this length will be wrapped. Set to `0` to disable wrapping. Default is `250`.
+
+```javascript
+beautify_html(source, { wrap_line_length: 80 });
+```
+
+### `wrap_attributes`
+
+Controls how HTML tag attributes are wrapped when a tag has multiple attributes.
+
+| Value | Description |
+| --- | --- |
+| `auto` | Wrap only when the line is too long (default) |
+| `force` | Wrap each attribute onto its own line, except the first |
+| `force-aligned` | Wrap and align attributes to the first attribute's position |
+| `force-expand-multiline` | Wrap all attributes onto separate lines when any wrapping occurs |
+| `aligned-multiple` | Align multiple attributes per line to the first attribute |
+| `preserve` | Preserve existing attribute wrapping |
+| `preserve-aligned` | Preserve existing wrapping and align attributes |
+
+<Tabs>
+  <Tab title="auto (default)">
+    ```html
+    <input type="text" name="email" placeholder="Enter email" class="form-control">
+    ```
+  </Tab>
+  <Tab title="force">
+    ```html
+    <input type="text"
+        name="email"
+        placeholder="Enter email"
+        class="form-control">
+    ```
+  </Tab>
+  <Tab title="force-aligned">
+    ```html
+    <input type="text"
+           name="email"
+           placeholder="Enter email"
+           class="form-control">
+    ```
+  </Tab>
+  <Tab title="force-expand-multiline">
+    ```html
+    <input
+        type="text"
+        name="email"
+        placeholder="Enter email"
+        class="form-control"
+    >
+    ```
+  </Tab>
+</Tabs>
+
+<Tip>
+  Use `wrap_attributes_min_attrs` to set the minimum number of attributes before forcing wraps. Default is `2`.
+</Tip>
+
+### `inline` and `unformatted`
+
+`inline` is a list of tag names that are treated as inline elements and will not trigger line breaks around them. By default it includes common inline elements like `a`, `span`, `em`, `strong`, `img`, `input`, and others.
+
+`unformatted` is a list of tags whose content the beautifier will not reformat. Unlike `inline`, using `unformatted` preserves whitespace inside the tag.
+
+```javascript
+beautify_html(source, {
+    // Add 'custom-tag' to the inline list
+    inline: ['span', 'a', 'custom-tag'],
+    // Do not reformat <code> blocks
+    unformatted: ['code', 'pre']
+});
+```
+
+### `content_unformatted`
+
+A list of tags whose entire content (including child elements) is left unformatted. Defaults to `["pre", "textarea"]`.
+
+```javascript
+beautify_html(source, {
+    content_unformatted: ['pre', 'textarea', 'script']
+});
+```
+
+### `extra_liners`
+
+A list of tags that get an extra blank line inserted before them. Defaults to `["head", "body", "/html"]`, which produces the blank lines you see before `<head>`, `<body>`, and `</html>` in beautified output.
+
+```javascript
+beautify_html(source, {
+    // Remove the extra blank lines
+    extra_liners: []
+});
+```
+
+### `templating`
+
+Controls which template language syntaxes are recognized and preserved during beautification. When set to `auto` (the default in HTML), all supported template languages are enabled.
+
+| Value | Description |
+| --- | --- |
+| `auto` | Enable all template syntaxes (HTML default) |
+| `none` | No templating support |
+| `django` | Django/Jinja2 `{% %}` and `{{ }}` tags |
+| `erb` | ERB `<% %>` tags |
+| `handlebars` | Handlebars/Mustache `{{ }}` tags |
+| `php` | PHP `<?php ?>` tags |
+| `smarty` | Smarty `{$var}` tags |
+| `angular` | AngularJS `{{ }}` expressions |
+
+```javascript
+beautify_html(source, {
+    // Only recognize Handlebars syntax
+    templating: ['handlebars']
+});
+```
+
+<Warning>
+  In JavaScript beautification, `templating` defaults to `none`. If you are beautifying HTML that contains template syntax, use the HTML beautifier, not the JS beautifier.
+</Warning>
+
+## Embedded JS and CSS
+
+The HTML beautifier automatically beautifies code inside `<script>` and `<style>` blocks. You can pass JS and CSS options alongside HTML options — the beautifier routes them to the appropriate sub-beautifier.
+
+```javascript
+const beautify = require('js-beautify');
+
+beautify.html(source, {
+    // HTML options
+    indent_size: 4,
+    indent_inner_html: false,
+    wrap_attributes: 'force-aligned',
+
+    // These apply to embedded <script> blocks
+    js: {
+        indent_size: 2,
+        brace_style: 'collapse'
+    },
+
+    // These apply to embedded <style> blocks
+    css: {
+        indent_size: 2,
+        newline_between_rules: true
+    }
+});
+```
+
+## Usage
+
+<Tabs>
+  <Tab title="Node.js">
+    ```javascript
+    const beautify_html = require('js-beautify').html;
+
+    const ugly = '<div><p>Hello</p></div>';
+    const pretty = beautify_html(ugly, {
+        indent_size: 2,
+        wrap_line_length: 100
+    });
+
+    console.log(pretty);
+    ```
+  </Tab>
+  <Tab title="CLI">
+    ```bash
+    html-beautify --indent-size 2 index.html
+
+    # or via js-beautify with --html flag
+    js-beautify --html --indent-size 2 index.html
+    ```
+  </Tab>
+</Tabs>

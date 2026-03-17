@@ -1,0 +1,112 @@
+---
+title: "Installation"
+description: "Install JS Beautify for Node.js, Python, or embed it as a web library via CDN."
+---
+
+## Node.js
+
+JS Beautify requires **Node.js >= 14**.
+
+<Steps>
+  <Step title="Install the package">
+    Install globally to get the `js-beautify`, `css-beautify`, and `html-beautify` executables on your PATH, or install locally to use it as a library in your project.
+
+    <CodeGroup>
+      ```bash npm (global)
+      npm install --global js-beautify
+      ```
+
+      ```bash npm (local)
+      npm install js-beautify
+      ```
+
+      ```bash yarn
+      yarn add js-beautify
+      ```
+
+      ```bash pnpm
+      pnpm add js-beautify
+      ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Verify the installation">
+    ```bash
+    js-beautify --version
+    ```
+  </Step>
+</Steps>
+
+<Note>
+  To install the latest beta or release candidate, use the `next` tag:
+
+  ```bash
+  npm install js-beautify@next
+  ```
+</Note>
+
+## Python
+
+The Python package can only reformat JavaScript. Install the separate `cssbeautifier` package if you also need CSS formatting.
+
+<Steps>
+  <Step title="Install jsbeautifier">
+    ```bash
+    pip install jsbeautifier
+    ```
+  </Step>
+
+  <Step title="Install cssbeautifier (optional)">
+    ```bash
+    pip install cssbeautifier
+    ```
+  </Step>
+
+  <Step title="Verify the installation">
+    ```bash
+    js-beautify --version
+    ```
+  </Step>
+</Steps>
+
+## Web / CDN
+
+Embed JS Beautify directly in an HTML page using script tags from cdnjs. Three separate files cover JavaScript, CSS, and HTML formatting.
+
+<Steps>
+  <Step title="Add the script tags">
+    Include the scripts you need before your own code. Use the minified versions in production.
+
+    <CodeGroup>
+      ```html Unminified
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify-css.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify-html.js"></script>
+      ```
+
+      ```html Minified
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify-css.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify-html.min.js"></script>
+      ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Call the global functions">
+    Each script exposes a global function: `js_beautify`, `css_beautify`, and `html_beautify`.
+
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+      <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify.min.js"></script>
+        <script src="script.js"></script>
+      </body>
+    </html>
+    ```
+  </Step>
+</Steps>
+
+<Tip>
+  You only need to include the script files for the languages you intend to format. If you only format JavaScript, `beautify.min.js` alone is sufficient.
+</Tip>

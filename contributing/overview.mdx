@@ -1,0 +1,127 @@
+---
+title: "Contributing"
+description: "Learn how to contribute to js-beautify, from filing issues to submitting pull requests."
+---
+
+js-beautify is a community-driven project and contributors are always welcome. Whether you're fixing a bug, improving documentation, or adding a new feature, your help makes the project better for everyone.
+
+<Note>
+  Before diving in, file an issue before filing a PR whenever possible. This gives maintainers a chance to discuss design details with you upfront and avoids wasted effort.
+</Note>
+
+## Development prerequisites
+
+Before you start, make sure you have the following installed:
+
+- **bash** and **make**
+- **Node.js** v16.x or greater (with npm)
+- **Python** v3.7 or greater (with pip)
+
+If you run into build problems, the maintainers are available on [gitter.im](https://gitter.im) to help.
+
+## How to contribute
+
+<Steps>
+  <Step title="Read CONTRIBUTING.md">
+    Read the [CONTRIBUTING.md](https://github.com/beautifier/js-beautify/blob/main/CONTRIBUTING.md) in the repository for the full guidelines before making any changes.
+  </Step>
+
+  <Step title="Find or open an issue">
+    Browse [open issues](https://github.com/beautifier/js-beautify/issues) on GitHub. Look for issues tagged **"Good first issue"** if you're new to the project. If you've found a bug or want to propose a feature, open a new issue first.
+  </Step>
+
+  <Step title="Fork the repository">
+    Fork [beautifier/js-beautify](https://github.com/beautifier/js-beautify) on GitHub and clone your fork locally.
+
+    ```bash
+    git clone https://github.com/<your-username>/js-beautify.git
+    cd js-beautify
+    ```
+  </Step>
+
+  <Step title="Make your change">
+    js-beautify has two mostly identical implementations — JavaScript and Python. The HTML beautifier is JavaScript-only.
+
+    **Any change to one implementation must also be made to the other.** This is a hard requirement. Familiarize yourself with the folder structure before you start:
+
+    | Folder | Contents |
+    |--------|----------|
+    | `js/` | JavaScript implementation |
+    | `python/` | Python implementation |
+    | `web/` | beautifier.io website |
+    | `test/` | Shared test data and generators |
+
+    Add tests for your change in `/test/data/*/test.js`. Generated test files must be committed alongside your source changes.
+  </Step>
+
+  <Step title="Run tests">
+    Run the full test suite before committing. All generated test files must be checked in.
+
+    **JavaScript only:**
+    ```bash
+    make js
+    ```
+
+    **Python only:**
+    ```bash
+    make py
+    ```
+
+    **Both implementations (required before submitting a PR):**
+    ```bash
+    make
+    ```
+
+    **Run the CI check locally after committing:**
+    ```bash
+    make ci
+    ```
+
+    You can also start a local dev server to manually test HTML/JS changes:
+    ```bash
+    make serve
+    # Visit http://localhost:8080
+    # For a debug (human-readable) build: http://localhost:8080/?debug
+    ```
+  </Step>
+
+  <Step title="Submit a pull request">
+    Push your branch and open a pull request against `main`.
+
+    - Run `make ci` locally after your commit and before opening the PR. You can open the PR even if it reports errors, but the PR won't be merged until all checks pass.
+    - Include a description of your change. Add examples of input and expected output when relevant.
+    - Pull requests must pass CI checks on Linux and Windows across multiple versions of Node.js and Python before they are merged.
+  </Step>
+</Steps>
+
+## Reporting bugs
+
+If you find a bug, [open an issue](https://github.com/beautifier/js-beautify/issues) and include:
+
+- Your environment (OS, Node.js version, Python version)
+- A clear description of the current behavior
+- What you believe the correct behavior should be
+- A minimal example that reproduces the problem
+
+The more detail you provide, the more likely someone can make progress on it quickly.
+
+## Code of conduct
+
+This project follows the standard open source code of conduct. Be respectful, constructive, and collaborative. See the repository's [code of conduct](https://github.com/beautifier/js-beautify/blob/main/CODE_OF_CONDUCT.md) for details.
+
+## Useful links
+
+<CardGroup cols={2}>
+  <Card title="GitHub Issues" icon="circle-exclamation" href="https://github.com/beautifier/js-beautify/issues">
+    Browse open bugs and feature requests, or file a new issue.
+  </Card>
+  <Card title="Good First Issues" icon="star" href="https://github.com/beautifier/js-beautify/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22">
+    Find beginner-friendly issues to get started with.
+  </Card>
+  <Card title="Pull Requests" icon="code-pull-request" href="https://github.com/beautifier/js-beautify/pulls">
+    View open pull requests or submit your own.
+  </Card>
+  <Card title="CONTRIBUTING.md" icon="file-lines" href="https://github.com/beautifier/js-beautify/blob/main/CONTRIBUTING.md">
+    Full contributing guidelines in the repository.
+  </Card>
+</CardGroup>

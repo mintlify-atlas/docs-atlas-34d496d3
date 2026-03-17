@@ -1,0 +1,226 @@
+---
+title: "js_beautify() / beautify.js()"
+description: "Beautify and reformat JavaScript source code using the js-beautify Node.js API."
+---
+
+## Overview
+
+The default export of `js-beautify` is a function that beautifies JavaScript source code. All three aliases below are equivalent:
+
+```javascript
+const beautify = require('js-beautify');
+const beautify = require('js-beautify').js;
+const beautify = require('js-beautify').js_beautify;
+```
+
+For ESM imports:
+
+```javascript
+import beautify from 'js-beautify';
+
+beautify.js(code, options);
+```
+
+## Function signature
+
+```typescript
+beautify(sourceCode: string, options?: object): string
+```
+
+## Parameters
+
+<ParamField path="sourceCode" type="string" required>
+  The JavaScript source code string to beautify. You can also pass minified code, bookmarklets, or scripts packed by Dean Edward's packer.
+</ParamField>
+
+<ParamField path="options" type="object">
+  Configuration options object. All keys use underscores (e.g., `indent_size`). Options loaded from `.jsbeautifyrc` or environment variables are merged with lower priority than options passed directly here.
+
+  <Expandable title="options">
+    <ParamField path="indent_size" type="number" default="4">
+      Number of spaces per indentation level.
+    </ParamField>
+
+    <ParamField path="indent_char" type="string" default=" ">
+      Character used for indentation. Overridden to `\t` when `indent_with_tabs` is `true`.
+    </ParamField>
+
+    <ParamField path="indent_with_tabs" type="boolean" default="false">
+      Indent with tabs instead of spaces. When `true`, sets `indent_char` to `\t`.
+    </ParamField>
+
+    <ParamField path="eol" type="string" default="\n">
+      Line terminator character(s). Use `\r\n` for Windows-style endings, or `auto` to detect from the input file.
+    </ParamField>
+
+    <ParamField path="end_with_newline" type="boolean" default="false">
+      Ensure the output ends with a newline character.
+    </ParamField>
+
+    <ParamField path="indent_level" type="number" default="0">
+      Initial indentation level applied to all output lines. Useful when embedding code inside a larger formatted document.
+    </ParamField>
+
+    <ParamField path="preserve_newlines" type="boolean" default="true">
+      Preserve existing blank lines in the source. Disable to remove all extra blank lines.
+    </ParamField>
+
+    <ParamField path="max_preserve_newlines" type="number" default="10">
+      Maximum number of consecutive blank lines to preserve in a single run. Only applies when `preserve_newlines` is `true`.
+    </ParamField>
+
+    <ParamField path="space_in_paren" type="boolean" default="false">
+      Add padding spaces inside parentheses, e.g. `f( a, b )` instead of `f(a, b)`.
+    </ParamField>
+
+    <ParamField path="space_in_empty_paren" type="boolean" default="false">
+      Add a single space inside empty parentheses, e.g. `f( )` instead of `f()`.
+    </ParamField>
+
+    <ParamField path="jslint_happy" type="boolean" default="false">
+      Enable stricter JSLint-compatible output. Implies `space_after_anon_function: true`.
+    </ParamField>
+
+    <ParamField path="space_after_anon_function" type="boolean" default="false">
+      Add a space before an anonymous function's parentheses, e.g. `function ()` instead of `function()`.
+    </ParamField>
+
+    <ParamField path="space_after_named_function" type="boolean" default="false">
+      Add a space before a named function's parentheses, e.g. `function example ()` instead of `function example()`.
+    </ParamField>
+
+    <ParamField path="brace_style" type="string" default="collapse">
+      Controls brace placement. Accepted values: `collapse`, `expand`, `end-expand`, `none`. Append `,preserve-inline` to any value to keep single-line blocks on one line (e.g., `collapse,preserve-inline`).
+    </ParamField>
+
+    <ParamField path="unindent_chained_methods" type="boolean" default="false">
+      Do not indent chained method calls relative to their receiver.
+    </ParamField>
+
+    <ParamField path="break_chained_methods" type="boolean" default="false">
+      Break chained method calls onto separate lines.
+    </ParamField>
+
+    <ParamField path="keep_array_indentation" type="boolean" default="false">
+      Preserve the original indentation of array elements rather than re-indenting them.
+    </ParamField>
+
+    <ParamField path="unescape_strings" type="boolean" default="false">
+      Decode printable characters encoded in `\xNN` hexadecimal notation back to their literal characters.
+    </ParamField>
+
+    <ParamField path="wrap_line_length" type="number" default="0">
+      Wrap lines that exceed this many characters. Set to `0` to disable wrapping.
+    </ParamField>
+
+    <ParamField path="e4x" type="boolean" default="false">
+      Pass E4X XML literals through untouched instead of attempting to parse them as JavaScript.
+    </ParamField>
+
+    <ParamField path="comma_first" type="boolean" default="false">
+      Place commas at the beginning of new lines instead of at the end.
+    </ParamField>
+
+    <ParamField path="operator_position" type="string" default="before-newline">
+      Controls where binary operators are placed when a line is wrapped. Accepted values: `before-newline`, `after-newline`, `preserve-newline`.
+    </ParamField>
+
+    <ParamField path="indent_empty_lines" type="boolean" default="false">
+      Keep indentation whitespace on otherwise empty lines.
+    </ParamField>
+
+    <ParamField path="templating" type="array" default="[&quot;auto&quot;]">
+      List of templating languages to recognize and pass through. Accepted values: `auto`, `none`, `django`, `erb`, `handlebars`, `php`, `smarty`, `angular`. `auto` disables all templating in JavaScript context.
+    </ParamField>
+
+    <ParamField path="eval_code" type="boolean" default="false">
+      Evaluate the code using a JS interpreter before beautifying. May help with some obfuscated scripts, but poses a security risk. Not exposed via CLI.
+    </ParamField>
+
+    <ParamField path="space_before_conditional" type="boolean" default="true">
+      Add a space before conditional expressions such as `if (`. Not exposed via CLI.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Return value
+
+<ResponseField name="result" type="string">
+  The beautified JavaScript source code as a string.
+</ResponseField>
+
+## Examples
+
+<CodeGroup>
+
+```javascript CommonJS
+const beautify = require('js-beautify');
+
+const ugly = 'function hello(name){return "Hello, "+name;}';
+
+const pretty = beautify(ugly, {
+  indent_size: 2,
+  space_in_empty_paren: true,
+});
+
+console.log(pretty);
+// function hello(name) {
+//   return "Hello, " + name;
+// }
+```
+
+```javascript ESM
+import beautify from 'js-beautify';
+import { readFileSync } from 'fs';
+
+const source = readFileSync('bundle.min.js', 'utf8');
+
+const formatted = beautify.js(source, {
+  indent_size: 4,
+  brace_style: 'collapse,preserve-inline',
+  end_with_newline: true,
+});
+
+process.stdout.write(formatted);
+```
+
+```javascript Read file async
+const beautify = require('js-beautify').js;
+const fs = require('fs');
+
+fs.readFile('foo.js', 'utf8', (err, data) => {
+  if (err) throw err;
+  console.log(beautify(data, { indent_size: 2, space_in_empty_paren: true }));
+});
+```
+
+</CodeGroup>
+
+<Note>
+  Configuration option names are the same as CLI flag names but with underscores instead of dashes. For example, `--indent-size 2` maps to `{ indent_size: 2 }`.
+</Note>
+
+## Configuration loading (Node.js only)
+
+In the Node.js environment, options are resolved from the following sources in priority order (highest to lowest):
+
+1. Options passed directly to the function
+2. `jsbeautify_`-prefixed environment variables
+3. A JSON config file specified via `--config`
+4. A `.jsbeautifyrc` JSON file found at or above the current working directory
+
+## Language-specific overrides
+
+When loading from `.jsbeautifyrc`, you can scope settings to a specific language using a nested key:
+
+```json
+{
+  "indent_size": 4,
+  "js": {
+    "preserve_newlines": true
+  },
+  "css": {
+    "indent_size": 2
+  }
+}
+```

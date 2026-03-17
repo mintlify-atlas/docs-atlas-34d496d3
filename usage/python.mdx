@@ -1,0 +1,138 @@
+---
+title: "Python Usage"
+description: "Beautify JavaScript and CSS from Python using the jsbeautifier and cssbeautifier packages."
+---
+
+<Note>
+The Python packages only beautify **JavaScript** and **CSS**. HTML beautification is not supported by the Python implementation. For HTML, use the [Node.js library](/usage/node-library) or [CLI](/usage/cli).
+</Note>
+
+## Installation
+
+Install the packages you need from PyPI:
+
+<CodeGroup>
+
+```bash JavaScript
+pip install jsbeautifier
+```
+
+```bash CSS
+pip install cssbeautifier
+```
+
+</CodeGroup>
+
+## JavaScript Beautifier
+
+### Basic Usage
+
+```python
+import jsbeautifier
+
+result = jsbeautifier.beautify('function foo(){return 1;}')
+print(result)
+# function foo() {
+#     return 1;
+# }
+```
+
+### Beautify from a File
+
+```python
+import jsbeautifier
+
+result = jsbeautifier.beautify_file('path/to/file.js')
+print(result)
+```
+
+### Custom Options
+
+Fetch the default options object, modify the attributes you need, then pass it to `beautify`:
+
+```python
+import jsbeautifier
+
+opts = jsbeautifier.default_options()
+opts.indent_size = 2
+opts.space_in_empty_paren = True
+
+result = jsbeautifier.beautify('function foo(){return 1;}', opts)
+print(result)
+# function foo() {
+#   return 1;
+# }
+```
+
+## CSS Beautifier
+
+### Basic Usage
+
+```python
+import cssbeautifier
+
+result = cssbeautifier.beautify('.foo{color:red;background:blue;}')
+print(result)
+# .foo {
+#     color: red;
+#     background: blue;
+# }
+```
+
+### Custom Options
+
+```python
+import cssbeautifier
+
+opts = cssbeautifier.default_options()
+opts.indent_size = 2
+opts.end_with_newline = True
+
+result = cssbeautifier.beautify('.foo{color:red;}', opts)
+print(result)
+```
+
+## CLI from Python Install
+
+Installing `jsbeautifier` also installs the `js-beautify` command-line script. Beautified output goes to `stdout` by default:
+
+```bash
+js-beautify file.js
+```
+
+Write the output to a file:
+
+```bash
+js-beautify file.js -o file.pretty.js
+```
+
+Overwrite the input file in-place:
+
+```bash
+js-beautify -r file.js
+```
+
+## Options Reference
+
+Option names are the same as CLI flags with hyphens replaced by underscores. For example, `--indent-size 2 --space-in-empty-paren` corresponds to:
+
+```python
+opts.indent_size = 2
+opts.space_in_empty_paren = True
+```
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `indent_size` | `4` | Spaces per indentation level |
+| `indent_char` | `" "` | Character used for indentation |
+| `indent_with_tabs` | `False` | Use tabs instead of spaces |
+| `eol` | `"\n"` | Line terminator character(s) |
+| `end_with_newline` | `False` | End output with a newline |
+| `preserve_newlines` | `True` | Keep existing blank lines |
+| `max_preserve_newlines` | `10` | Maximum blank lines to preserve |
+| `brace_style` | `"collapse"` | Brace placement style |
+| `space_in_paren` | `False` | Pad inside parens: `f( a, b )` |
+| `space_in_empty_paren` | `False` | Space inside empty parens: `f( )` |
+| `jslint_happy` | `False` | Enable jslint-stricter mode |
+| `wrap_line_length` | `0` | Wrap lines longer than N characters |
+| `comma_first` | `False` | Put commas at the start of lines |

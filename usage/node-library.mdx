@@ -1,0 +1,141 @@
+---
+title: "Node.js Library"
+description: "Use js-beautify as a Node.js library to format JavaScript, CSS, and HTML programmatically."
+---
+
+## Installation
+
+```bash
+npm install js-beautify
+```
+
+## Importing
+
+Choose between CommonJS `require` and ESM `import` depending on your project setup.
+
+<CodeGroup>
+
+```javascript CommonJS
+// Default export beautifies JavaScript
+var beautify = require('js-beautify');
+
+// Named exports for each language
+var beautify_js   = require('js-beautify').js;
+var beautify_css  = require('js-beautify').css;
+var beautify_html = require('js-beautify').html;
+
+// Subpath imports are also supported
+var beautify_js = require('js-beautify/js').js;
+```
+
+```javascript ESM
+import beautify from 'js-beautify';
+
+// Methods are available on the default export
+beautify.js(code, options);
+beautify.css(code, options);
+beautify.html(code, options);
+```
+
+</CodeGroup>
+
+## API
+
+All three beautifier methods share the same signature:
+
+```
+beautify(code, options)
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `code` | `string` | The source code string to beautify |
+| `options` | `object` | Configuration options (optional) |
+
+Option names match the CLI flag names with hyphens replaced by underscores. For example, `--indent-size 2 --space-in-empty-paren` becomes `{ indent_size: 2, space_in_empty_paren: true }`.
+
+## Examples
+
+### JavaScript
+
+```javascript
+var beautify = require('js-beautify');
+
+var ugly = 'function foo(a,b){return a+b;}';
+var result = beautify(ugly, { indent_size: 2 });
+
+console.log(result);
+// function foo(a, b) {
+//   return a + b;
+// }
+```
+
+You can also read from a file:
+
+```javascript
+var beautify = require('js-beautify/js').js;
+var fs = require('fs');
+
+fs.readFile('foo.js', 'utf8', function(err, data) {
+  if (err) throw err;
+  console.log(beautify(data, { indent_size: 2, space_in_empty_paren: true }));
+});
+```
+
+### CSS
+
+```javascript
+var beautify_css = require('js-beautify').css;
+
+var ugly = '.foo{color:red;background:blue;}';
+var result = beautify_css(ugly, { indent_size: 2 });
+
+console.log(result);
+// .foo {
+//   color: red;
+//   background: blue;
+// }
+```
+
+### HTML
+
+```javascript
+var beautify_html = require('js-beautify').html;
+
+var ugly = '<div><p>Hello <strong>world</strong></p></div>';
+var result = beautify_html(ugly, { indent_size: 2 });
+
+console.log(result);
+// <div>
+//   <p>Hello <strong>world</strong></p>
+// </div>
+```
+
+## Legacy Aliases
+
+<Note>
+The following legacy aliases exist for backwards compatibility. Prefer the shorter `.js`, `.css`, and `.html` names in new code.
+</Note>
+
+```javascript
+var beautify = require('js-beautify');
+
+// These are equivalent to .js, .css, and .html respectively
+beautify.js_beautify(code, options);
+beautify.css_beautify(code, options);
+beautify.html_beautify(code, options);
+```
+
+## Common Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `indent_size` | `4` | Number of spaces per indentation level |
+| `indent_char` | `" "` | Character used for indentation |
+| `indent_with_tabs` | `false` | Use tabs instead of spaces |
+| `eol` | `"\n"` | End-of-line character(s) |
+| `end_with_newline` | `false` | Ensure the output ends with a newline |
+| `preserve_newlines` | `true` | Preserve existing blank lines |
+| `max_preserve_newlines` | `10` | Maximum consecutive blank lines to keep |
+| `brace_style` | `"collapse"` | Brace placement style (`collapse`, `expand`, `end-expand`, `none`) |
+| `wrap_line_length` | `0` | Wrap lines longer than N characters (0 = disabled) |

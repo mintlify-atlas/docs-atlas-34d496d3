@@ -1,0 +1,198 @@
+---
+title: "html_beautify() / beautify.html()"
+description: "Beautify and reformat HTML source code using the js-beautify Node.js API."
+---
+
+## Overview
+
+The HTML beautifier is available as a named export from the `js-beautify` package:
+
+```javascript
+const beautify = require('js-beautify').html;
+const beautify = require('js-beautify').html_beautify; // legacy alias
+```
+
+For ESM imports:
+
+```javascript
+import beautify from 'js-beautify';
+
+beautify.html(code, options);
+```
+
+The HTML beautifier internally uses the JavaScript and CSS beautifiers to reformat embedded `<script>` and `<style>` blocks.
+
+## Function signature
+
+```typescript
+beautify.html(sourceCode: string, options?: object): string
+```
+
+## Parameters
+
+<ParamField path="sourceCode" type="string" required>
+  The HTML source code string to beautify.
+</ParamField>
+
+<ParamField path="options" type="object">
+  Configuration options object. All keys use underscores.
+
+  <Expandable title="options">
+    <ParamField path="indent_size" type="number" default="4">
+      Number of spaces per indentation level.
+    </ParamField>
+
+    <ParamField path="indent_char" type="string" default=" ">
+      Character used for indentation. Overridden to `\t` when `indent_with_tabs` is `true`.
+    </ParamField>
+
+    <ParamField path="indent_with_tabs" type="boolean" default="false">
+      Indent with tabs instead of spaces.
+    </ParamField>
+
+    <ParamField path="eol" type="string" default="\n">
+      Line terminator character(s). Use `\r\n` for Windows-style endings, or `auto` to detect from input.
+    </ParamField>
+
+    <ParamField path="end_with_newline" type="boolean" default="false">
+      Ensure the output ends with a newline character.
+    </ParamField>
+
+    <ParamField path="preserve_newlines" type="boolean" default="true">
+      Preserve existing blank lines in the source.
+    </ParamField>
+
+    <ParamField path="max_preserve_newlines" type="number" default="10">
+      Maximum number of consecutive blank lines to preserve. Only applies when `preserve_newlines` is `true`.
+    </ParamField>
+
+    <ParamField path="indent_inner_html" type="boolean" default="false">
+      Indent the contents of `<head>` and `<body>` elements. When `false`, their direct children are placed at the root indentation level.
+    </ParamField>
+
+    <ParamField path="indent_scripts" type="string" default="normal">
+      Sets the indentation level of content inside `<script>` tags. Accepted values: `keep` (match surrounding HTML), `separate` (use an independent indent level), `normal` (indent relative to the script tag).
+    </ParamField>
+
+    <ParamField path="wrap_line_length" type="number" default="250">
+      Wrap lines that exceed this many characters. Set to `0` to disable.
+    </ParamField>
+
+    <ParamField path="wrap_attributes" type="string" default="auto">
+      Controls attribute wrapping on HTML tags. Accepted values: `auto`, `force`, `force-aligned`, `force-expand-multiline`, `aligned-multiple`, `preserve`, `preserve-aligned`.
+    </ParamField>
+
+    <ParamField path="wrap_attributes_min_attrs" type="number" default="2">
+      Minimum number of attributes on a tag before forced-wrap modes take effect.
+    </ParamField>
+
+    <ParamField path="wrap_attributes_indent_size" type="number">
+      Number of spaces to indent wrapped attributes. Defaults to `indent_size`. Ignored when `wrap_attributes` is `aligned`.
+    </ParamField>
+
+    <ParamField path="inline" type="array">
+      List of tag names to treat as inline elements. Defaults to the standard HTML inline element list: `a`, `abbr`, `b`, `br`, `button`, `code`, `em`, `i`, `img`, `input`, `label`, `s`, `select`, `small`, `span`, `strong`, `textarea`, and others.
+    </ParamField>
+
+    <ParamField path="inline_custom_elements" type="boolean" default="true">
+      Treat custom elements (hyphenated tag names) as inline elements.
+    </ParamField>
+
+    <ParamField path="unformatted" type="array" default="[]">
+      List of tags whose opening/closing tags and content are left completely unformatted. Defaults to empty (no additional tags).
+    </ParamField>
+
+    <ParamField path="content_unformatted" type="array" default="[&quot;pre&quot;, &quot;textarea&quot;]">
+      List of tags whose content (but not the tags themselves) is left unformatted. The tags are still indented correctly.
+    </ParamField>
+
+    <ParamField path="extra_liners" type="array" default="[&quot;head&quot;, &quot;body&quot;, &quot;/html&quot;]">
+      List of tags that should have an extra blank line prepended before them.
+    </ParamField>
+
+    <ParamField path="templating" type="array" default="[&quot;auto&quot;]">
+      Templating languages to recognize and pass through. In HTML context, `auto` enables all supported languages: `django`, `erb`, `handlebars`, `php`. Accepted values: `auto`, `none`, `angular`, `django`, `erb`, `handlebars`, `php`, `smarty`.
+    </ParamField>
+
+    <ParamField path="unformatted_content_delimiter" type="string" default="">
+      Keep text content together between occurrences of this string. Useful for custom delimiters in template languages.
+    </ParamField>
+
+    <ParamField path="indent_empty_lines" type="boolean" default="false">
+      Keep indentation whitespace on otherwise empty lines.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Return value
+
+<ResponseField name="result" type="string">
+  The beautified HTML source code as a string.
+</ResponseField>
+
+## Examples
+
+<CodeGroup>
+
+```javascript CommonJS
+const beautifyHtml = require('js-beautify').html;
+
+const ugly = '<html><head><title>Test</title></head><body><p>Hello <strong>world</strong></p></body></html>';
+
+const pretty = beautifyHtml(ugly, {
+  indent_size: 2,
+  wrap_line_length: 120,
+});
+
+console.log(pretty);
+// <html>
+//   <head>
+//     <title>Test</title>
+//   </head>
+//   <body>
+//     <p>Hello <strong>world</strong></p>
+//   </body>
+// </html>
+```
+
+```javascript ESM
+import beautify from 'js-beautify';
+import { readFileSync } from 'fs';
+
+const source = readFileSync('template.html', 'utf8');
+
+const formatted = beautify.html(source, {
+  indent_size: 4,
+  indent_inner_html: true,
+  wrap_attributes: 'force-expand-multiline',
+  end_with_newline: true,
+});
+
+process.stdout.write(formatted);
+```
+
+</CodeGroup>
+
+<Tip>
+  Use `content_unformatted: ['pre', 'textarea', 'script']` to prevent the beautifier from modifying the content of those elements, which is useful when their whitespace is significant.
+</Tip>
+
+## Directives
+
+You can control beautifier behavior inline with HTML comments:
+
+```html
+<!-- beautify ignore:start -->
+<div class="some  weird   spacing"></div>
+<!-- beautify ignore:end -->
+
+<!-- beautify preserve:start -->
+<ul>
+    <li>Item one</li>
+    <li>Item two</li>
+</ul>
+<!-- beautify preserve:end -->
+```
+
+- **`ignore`** — The beautifier treats the enclosed block as literal text and does not parse or reformat it.
+- **`preserve`** — The beautifier parses the enclosed block but keeps its existing formatting unchanged.

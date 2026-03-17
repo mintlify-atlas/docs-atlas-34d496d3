@@ -1,0 +1,127 @@
+---
+title: "html-beautify CLI"
+description: "Command-line interface for beautifying HTML files with js-beautify."
+---
+
+## Synopsis
+
+```bash
+html-beautify [options] <file ...>
+```
+
+The `html-beautify` command is installed alongside `js-beautify` when you install the package globally:
+
+```bash
+npm install -g js-beautify
+```
+
+Beautified output is written to stdout by default. You can also invoke the HTML beautifier via `js-beautify --type html`.
+
+<Note>
+  Pass `-` as a filename to read from stdin.
+</Note>
+
+## Options
+
+### I/O options
+
+| Flag | Long form | Description |
+|------|-----------|-------------|
+| `-f` | `--file` | Input file(s). Pass `-` for stdin. |
+| `-r` | `--replace` | Write output in-place, overwriting the input file. |
+| `-o` | `--outfile` | Write output to a specific file instead of stdout. |
+| | `--config` | Path to a JSON config file. |
+| `-q` | `--quiet` | Suppress logging to stdout. |
+| `-h` | `--help` | Show help and exit. |
+| `-v` | `--version` | Show the version number and exit. |
+
+### Indentation options
+
+| Flag | Long form | Default | Description |
+|------|-----------|---------|-------------|
+| `-s` | `--indent-size` | `4` | Number of spaces per indentation level. |
+| `-c` | `--indent-char` | `" "` | Character used for indentation. |
+| `-t` | `--indent-with-tabs` | `false` | Indent with tabs, overrides `-s` and `-c`. |
+| | `--indent-empty-lines` | `false` | Keep indentation on empty lines. |
+| | `--editorconfig` | `false` | Use EditorConfig to set options from `.editorconfig`. |
+
+### Output formatting
+
+| Flag | Long form | Default | Description |
+|------|-----------|---------|-------------|
+| `-e` | `--eol` | first newline in file, else `\n` | Line terminator character(s). |
+| `-n` | `--end-with-newline` | `false` | End output with a newline. |
+| `-p` | `--preserve-newlines` | `true` | Preserve existing line breaks. Use `--no-preserve-newlines` to disable. |
+| `-m` | `--max-preserve-newlines` | `10` | Maximum blank lines to preserve in one chunk. |
+| `-w` | `--wrap-line-length` | `250` | Maximum characters per line. `0` disables wrapping. |
+| `-b` | `--brace-style` | `collapse` | Brace style: `collapse`, `expand`, `end-expand`, `none`, `collapse-preserve-inline`. |
+| | `--templating` | `auto` | Templating languages to recognize. `auto` enables all in HTML context. Values: `auto`, `none`, `django`, `erb`, `handlebars`, `php`, `smarty`, `angular`. |
+
+### Attribute wrapping
+
+| Flag | Long form | Default | Description |
+|------|-----------|---------|-------------|
+| `-A` | `--wrap-attributes` | `auto` | Attribute wrapping strategy: `auto`, `force`, `force-aligned`, `force-expand-multiline`, `aligned-multiple`, `preserve`, `preserve-aligned`. |
+| `-M` | `--wrap-attributes-min-attrs` | `2` | Minimum number of attributes before forced-wrap modes activate. |
+| `-i` | `--wrap-attributes-indent-size` | (indent-size) | Indentation size for wrapped attributes. Ignored when `wrap-attributes` is `aligned`. |
+
+### Content handling
+
+| Flag | Long form | Default | Description |
+|------|-----------|---------|-------------|
+| `-I` | `--indent-inner-html` | `false` | Indent the contents of `<head>` and `<body>` elements. |
+| `-S` | `--indent-scripts` | `normal` | Indentation of `<script>` tag content: `keep`, `separate`, or `normal`. |
+| `-d` | `--inline` | (standard inline tags) | Comma-separated list of tags to treat as inline elements. |
+| | `--inline_custom_elements` | `true` | Treat custom elements (hyphenated names) as inline. |
+| `-U` | `--unformatted` | `[]` | Tags whose content should not be reformatted at all. |
+| `-T` | `--content_unformatted` | `pre,textarea` | Tags whose content (not the tags themselves) should not be reformatted. |
+| `-E` | `--extra_liners` | `head,body,/html` | Tags that should have an extra newline prepended before them. |
+| | `--unformatted_content_delimiter` | `""` | Keep text content together between occurrences of this string. |
+
+## Examples
+
+```bash
+# Beautify from stdin to stdout
+cat index.html | html-beautify -
+
+# Beautify a file, output to stdout
+html-beautify index.html
+
+# Replace the file in-place
+html-beautify --replace index.html
+
+# Write to a new file with 2-space indentation
+html-beautify -s 2 -o dist/index.html src/index.html
+
+# Indent inner HTML and force-wrap attributes
+html-beautify --indent-inner-html --wrap-attributes force-expand-multiline index.html
+
+# End with a newline, preserve up to 2 blank lines
+html-beautify --end-with-newline --max-preserve-newlines 2 index.html
+
+# Do not reformat content inside <pre> and <code> tags
+html-beautify --content_unformatted pre,code index.html
+```
+
+<Tip>
+  You can also run the HTML beautifier via the main `js-beautify` command with the `--type html` flag:
+  ```bash
+  js-beautify --type html index.html
+  ```
+</Tip>
+
+## Directives
+
+You can embed directives directly in your HTML to control the beautifier on a per-block basis:
+
+```html
+<!-- beautify ignore:start -->
+<div class="some  messy  spacing"></div>
+<!-- beautify ignore:end -->
+
+<!-- beautify preserve:start -->
+<ul>
+    <li>Keep this formatting</li>
+</ul>
+<!-- beautify preserve:end -->
+```

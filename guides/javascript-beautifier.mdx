@@ -1,0 +1,334 @@
+---
+title: "JavaScript Beautifier"
+description: "Reformat, re-indent, and deobfuscate JavaScript code using js_beautify."
+---
+
+The JavaScript beautifier reformats and re-indents JavaScript source code. It can also unpack scripts packed by Dean Edwards' popular packer and partly deobfuscate scripts processed by [javascript-obfuscator](https://github.com/javascript-obfuscator/javascript-obfuscator).
+
+## Supported syntax
+
+The beautifier handles modern JavaScript including:
+
+- ES6+ features: `const`, `let`, arrow functions, destructuring, spread/rest operators
+- Async/await and generator functions
+- Template literals and tagged templates
+- JSX-like syntax
+- Dynamic `import()` expressions
+- Optional chaining (`?.`) and nullish coalescing (`??`)
+
+## Before and after
+
+The beautifier takes minified or poorly formatted code and produces readable output.
+
+<CodeGroup>
+
+```javascript before.js
+var x={a:1,b:2};function greet(name){if(name){return 'Hello, '+name+'!';}else{return 'Hello!';}}const arr=[1,2,3].map(n=>n*2);async function fetchData(url){const res=await fetch(url);return res.json();}
+```
+
+```javascript after.js
+var x = {
+    a: 1,
+    b: 2
+};
+
+function greet(name) {
+    if (name) {
+        return 'Hello, ' + name + '!';
+    } else {
+        return 'Hello!';
+    }
+}
+
+const arr = [1, 2, 3].map(n => n * 2);
+
+async function fetchData(url) {
+    const res = await fetch(url);
+    return res.json();
+}
+```
+
+</CodeGroup>
+
+## Key options
+
+### `brace_style`
+
+Controls where opening and closing braces are placed. Accepts a comma-separated value: a style name, optionally combined with `preserve-inline`.
+
+| Value | Description |
+| --- | --- |
+| `collapse` | Opening brace on same line as statement (default) |
+| `expand` | Opening brace on its own line |
+| `end-expand` | Closing brace on its own line only |
+| `none` | Do not adjust brace position |
+
+You can append `,preserve-inline` to any value to keep single-line blocks on one line.
+
+<Tabs>
+  <Tab title="collapse (default)">
+    ```javascript
+    if (condition) {
+        doSomething();
+    } else {
+        doOther();
+    }
+    ```
+  </Tab>
+  <Tab title="expand">
+    ```javascript
+    if (condition)
+    {
+        doSomething();
+    }
+    else
+    {
+        doOther();
+    }
+    ```
+  </Tab>
+  <Tab title="end-expand">
+    ```javascript
+    if (condition) {
+        doSomething();
+    }
+    else {
+        doOther();
+    }
+    ```
+  </Tab>
+  <Tab title="collapse,preserve-inline">
+    ```javascript
+    // Short blocks stay on one line
+    if (x) { return x; }
+
+    // Longer blocks are expanded
+    if (condition) {
+        doSomething();
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### `operator_position`
+
+When a line break occurs around a binary operator, this option controls which side of the break the operator appears on.
+
+| Value | Description |
+| --- | --- |
+| `before-newline` | Operator stays at the end of the previous line (default) |
+| `after-newline` | Operator moves to the start of the next line |
+| `preserve-newline` | Operator position is not changed |
+
+<Tabs>
+  <Tab title="before-newline (default)">
+    ```javascript
+    var result = value1 +
+        value2 +
+        value3;
+    ```
+  </Tab>
+  <Tab title="after-newline">
+    ```javascript
+    var result = value1
+        + value2
+        + value3;
+    ```
+  </Tab>
+</Tabs>
+
+### `space_in_paren` and `space_in_empty_paren`
+
+`space_in_paren` adds padding spaces inside parentheses. `space_in_empty_paren` adds a single space inside empty parentheses.
+
+```javascript
+// space_in_paren: false (default)
+foo(a, b);
+bar();
+
+// space_in_paren: true
+foo( a, b );
+bar();
+
+// space_in_paren: true, space_in_empty_paren: true
+foo( a, b );
+bar( );
+```
+
+### `jslint_happy`
+
+Enables stricter [JSLint](https://www.jslint.com/)-compatible formatting. When `true`, it automatically sets `space_after_anon_function` to `true`, adding a space before anonymous function parentheses.
+
+```javascript
+// jslint_happy: false (default)
+var fn = function() {};
+setTimeout(function() {
+    doWork();
+}, 100);
+
+// jslint_happy: true
+var fn = function () {};
+setTimeout(function () {
+    doWork();
+}, 100);
+```
+
+### `keep_array_indentation`
+
+When `true`, preserves the indentation of array elements as written in the source. When `false` (default), the beautifier re-indents array contents.
+
+```javascript
+// keep_array_indentation: false (default)
+var matrix = [
+    [1, 0, 0],
+    [0, 1, 0],
+    [0, 0, 1]
+];
+
+// keep_array_indentation: true
+// original unusual indentation is preserved
+var matrix = [[1, 0, 0],
+               [0, 1, 0],
+               [0, 0, 1]];
+```
+
+### `comma_first`
+
+When `true`, places commas at the beginning of each new line rather than at the end of the previous line.
+
+```javascript
+// comma_first: false (default)
+var obj = {
+    a: 1,
+    b: 2,
+    c: 3
+};
+
+// comma_first: true
+var obj = {
+    a: 1
+  , b: 2
+  , c: 3
+};
+```
+
+### `wrap_line_length`
+
+Sets a soft maximum line length. Lines that exceed this character count will be wrapped at the next opportunity. Set to `0` (default) to disable wrapping.
+
+```javascript
+// wrap_line_length: 0 (default, no wrapping)
+const result = someFunction(argumentOne, argumentTwo, argumentThree, argumentFour);
+
+// wrap_line_length: 60
+const result = someFunction(argumentOne, argumentTwo,
+    argumentThree, argumentFour);
+```
+
+## JSON beautification
+
+You can use the JavaScript beautifier to format JSON. Pass a JSON string to `js_beautify` and it produces indented output.
+
+```javascript
+const options = { indent_size: 2, space_in_empty_paren: true };
+
+const dataObj = { completed: false, id: 1, title: "delectus aut autem", userId: 1 };
+const dataJson = JSON.stringify(dataObj);
+
+js_beautify(dataJson, options);
+
+/*
+{
+  "completed": false,
+  "id": 1,
+  "title": "delectus aut autem",
+  "userId": 1,
+}
+*/
+```
+
+<Note>
+  For strict JSON output without trailing commas, use `JSON.parse` followed by `JSON.stringify` with a space argument instead. The JS beautifier is more permissive and useful when the input may not be 100% valid JSON.
+</Note>
+
+## All JS-specific options at a glance
+
+<AccordionGroup>
+  <Accordion title="brace_style">
+    **Default:** `"collapse"`  
+    **Values:** `collapse`, `expand`, `end-expand`, `none`, optionally append `,preserve-inline`
+
+    Controls placement of opening and closing braces.
+  </Accordion>
+  <Accordion title="operator_position">
+    **Default:** `"before-newline"`  
+    **Values:** `before-newline`, `after-newline`, `preserve-newline`
+
+    Where to place binary operators when a line break is inserted around them.
+  </Accordion>
+  <Accordion title="space_in_paren">
+    **Default:** `false`
+
+    Add padding spaces inside parentheses: `f( a, b )`.
+  </Accordion>
+  <Accordion title="space_in_empty_paren">
+    **Default:** `false`
+
+    Add a single space inside empty parentheses: `f( )`.
+  </Accordion>
+  <Accordion title="jslint_happy">
+    **Default:** `false`
+
+    Enable JSLint-stricter mode. Forces `space_after_anon_function` to `true`.
+  </Accordion>
+  <Accordion title="space_after_anon_function">
+    **Default:** `false`
+
+    Add a space before anonymous function parentheses: `function ()`.
+  </Accordion>
+  <Accordion title="space_after_named_function">
+    **Default:** `false`
+
+    Add a space before named function parentheses: `function example ()`.
+  </Accordion>
+  <Accordion title="keep_array_indentation">
+    **Default:** `false`
+
+    Preserve the original indentation of array elements.
+  </Accordion>
+  <Accordion title="comma_first">
+    **Default:** `false`
+
+    Place commas at the beginning of new lines instead of the end.
+  </Accordion>
+  <Accordion title="wrap_line_length">
+    **Default:** `0` (disabled)
+
+    Wrap lines that exceed N characters. `0` disables wrapping.
+  </Accordion>
+  <Accordion title="break_chained_methods">
+    **Default:** `false`
+
+    Break chained method calls across subsequent lines.
+  </Accordion>
+  <Accordion title="unindent_chained_methods">
+    **Default:** `false`
+
+    Do not indent chained method calls.
+  </Accordion>
+  <Accordion title="keep_array_indentation">
+    **Default:** `false`
+
+    Preserve array indentation as written in the source.
+  </Accordion>
+  <Accordion title="unescape_strings">
+    **Default:** `false`
+
+    Decode printable characters encoded in `xNN` notation inside strings.
+  </Accordion>
+  <Accordion title="e4x">
+    **Default:** `false`
+
+    Pass E4X XML literals through untouched.
+  </Accordion>
+</AccordionGroup>

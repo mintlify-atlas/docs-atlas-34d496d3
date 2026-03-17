@@ -1,0 +1,244 @@
+---
+title: "jsbeautifier (Python)"
+description: "Beautify JavaScript source code from Python using the jsbeautifier library."
+---
+
+## Installation
+
+```bash
+pip install jsbeautifier
+```
+
+<Note>
+  The Python `jsbeautifier` package only reformats JavaScript. It does not support HTML or CSS. For CSS, install the separate `cssbeautifier` package.
+</Note>
+
+## Module
+
+```python
+import jsbeautifier
+```
+
+## Functions
+
+### `beautify()`
+
+Beautify a JavaScript source string.
+
+```python
+jsbeautifier.beautify(source: str, opts=None) -> str
+```
+
+<ParamField path="source" type="str" required>
+  The JavaScript source code string to beautify.
+</ParamField>
+
+<ParamField path="opts" type="BeautifierOptions">
+  An options object returned by `default_options()`. If omitted, default options are used.
+</ParamField>
+
+<ResponseField name="result" type="str">
+  The beautified JavaScript source code.
+</ResponseField>
+
+---
+
+### `beautify_file()`
+
+Read a JavaScript file and return beautified output as a string.
+
+```python
+jsbeautifier.beautify_file(file_name: str, opts=None) -> str
+```
+
+<ParamField path="file_name" type="str" required>
+  Path to the JavaScript file. Pass `"-"` to read from stdin.
+</ParamField>
+
+<ParamField path="opts" type="BeautifierOptions">
+  An options object returned by `default_options()`.
+</ParamField>
+
+<ResponseField name="result" type="str">
+  The beautified JavaScript source code.
+</ResponseField>
+
+---
+
+### `default_options()`
+
+Return a `BeautifierOptions` instance populated with default values.
+
+```python
+jsbeautifier.default_options() -> BeautifierOptions
+```
+
+<ResponseField name="result" type="BeautifierOptions">
+  A `BeautifierOptions` object. Mutate its attributes before passing to `beautify()` or `beautify_file()`.
+</ResponseField>
+
+## `BeautifierOptions` attributes
+
+All attributes mirror the CLI flag names with underscores instead of dashes.
+
+<Expandable title="attributes">
+  <ParamField path="indent_size" type="int" default="4">
+    Number of spaces per indentation level.
+  </ParamField>
+
+  <ParamField path="indent_char" type="str" default=" ">
+    Character used for indentation.
+  </ParamField>
+
+  <ParamField path="indent_with_tabs" type="bool" default="False">
+    Indent with tabs instead of spaces.
+  </ParamField>
+
+  <ParamField path="eol" type="str" default="\n">
+    Line terminator character(s).
+  </ParamField>
+
+  <ParamField path="end_with_newline" type="bool" default="False">
+    Ensure the output ends with a newline.
+  </ParamField>
+
+  <ParamField path="indent_level" type="int" default="0">
+    Initial indentation level.
+  </ParamField>
+
+  <ParamField path="preserve_newlines" type="bool" default="True">
+    Preserve existing blank lines.
+  </ParamField>
+
+  <ParamField path="max_preserve_newlines" type="int" default="10">
+    Maximum consecutive blank lines to preserve.
+  </ParamField>
+
+  <ParamField path="space_in_paren" type="bool" default="False">
+    Add padding spaces inside parentheses: `f( a, b )`.
+  </ParamField>
+
+  <ParamField path="space_in_empty_paren" type="bool" default="False">
+    Add a single space inside empty parentheses: `f( )`.
+  </ParamField>
+
+  <ParamField path="jslint_happy" type="bool" default="False">
+    Enable JSLint-stricter mode. Implies `space_after_anon_function = True`.
+  </ParamField>
+
+  <ParamField path="space_after_anon_function" type="bool" default="False">
+    Add a space before anonymous function parens: `function ()`.
+  </ParamField>
+
+  <ParamField path="space_after_named_function" type="bool" default="False">
+    Add a space before named function parens: `function example ()`.
+  </ParamField>
+
+  <ParamField path="brace_style" type="str" default="collapse">
+    Brace placement style: `collapse`, `expand`, `end-expand`, `none`. Append `,preserve-inline` to keep single-line blocks.
+  </ParamField>
+
+  <ParamField path="unindent_chained_methods" type="bool" default="False">
+    Do not indent chained method calls.
+  </ParamField>
+
+  <ParamField path="break_chained_methods" type="bool" default="False">
+    Break chained method calls onto separate lines.
+  </ParamField>
+
+  <ParamField path="keep_array_indentation" type="bool" default="False">
+    Preserve original array indentation.
+  </ParamField>
+
+  <ParamField path="unescape_strings" type="bool" default="False">
+    Decode printable characters encoded in `\xNN` notation.
+  </ParamField>
+
+  <ParamField path="wrap_line_length" type="int" default="0">
+    Wrap lines exceeding this many characters. `0` disables wrapping.
+  </ParamField>
+
+  <ParamField path="e4x" type="bool" default="False">
+    Pass E4X XML literals through untouched.
+  </ParamField>
+
+  <ParamField path="comma_first" type="bool" default="False">
+    Place commas at the start of new lines instead of the end.
+  </ParamField>
+
+  <ParamField path="operator_position" type="str" default="before-newline">
+    Operator position on wrapped lines: `before-newline`, `after-newline`, `preserve-newline`.
+  </ParamField>
+
+  <ParamField path="indent_empty_lines" type="bool" default="False">
+    Keep indentation whitespace on otherwise empty lines.
+  </ParamField>
+
+  <ParamField path="templating" type="list" default="['auto']">
+    Templating languages to recognize. `auto` disables all in JavaScript context.
+  </ParamField>
+
+  <ParamField path="eval_code" type="bool" default="False">
+    Evaluate code using a JS interpreter before beautifying. Potential security risk.
+  </ParamField>
+
+  <ParamField path="space_before_conditional" type="bool" default="True">
+    Add a space before conditional expressions such as `if (`.
+  </ParamField>
+</Expandable>
+
+## Examples
+
+```python
+import jsbeautifier
+
+# Beautify with default options
+result = jsbeautifier.beautify('function hello(name){return "Hello, "+name;}')
+print(result)
+# function hello(name) {
+#     return "Hello, " + name;
+# }
+
+# Beautify with custom options
+opts = jsbeautifier.default_options()
+opts.indent_size = 2
+opts.space_in_empty_paren = True
+opts.end_with_newline = True
+
+result = jsbeautifier.beautify('function foo(){var x=1;return x;}', opts)
+print(result)
+# function foo() {
+#   var x = 1;
+#   return x;
+# }
+
+# Beautify a file
+result = jsbeautifier.beautify_file('app.min.js')
+with open('app.js', 'w') as f:
+    f.write(result)
+
+# Read from stdin
+import sys
+result = jsbeautifier.beautify_file('-')  # reads from stdin
+sys.stdout.write(result)
+```
+
+## CLI (Python)
+
+The `jsbeautifier` package also installs a `js-beautify` command:
+
+```bash
+# Beautify a file
+js-beautify app.min.js
+
+# Specify options
+js-beautify -s 2 --end-with-newline app.min.js
+
+# Replace in-place
+js-beautify -r app.min.js
+
+# Write to a specific output file
+js-beautify -o app.js app.min.js
+```
+
+Run `js-beautify --help` for a full list of CLI flags.

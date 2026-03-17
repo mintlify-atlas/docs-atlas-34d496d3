@@ -1,0 +1,100 @@
+---
+title: "Language-specific overrides"
+description: "Override beautifier options per language using a shallow inheritance tree in your config file or API call."
+---
+
+JS Beautify uses a shallow option tree. Top-level options apply to all languages, and you can override any of them for a specific language by nesting them under a `js`, `css`, or `html` key. You can also override options for JavaScript and CSS embedded _inside_ HTML by nesting them under `html.js` and `html.css`.
+
+## How it works
+
+When beautifying a file, the library merges the top-level options with the language-specific overrides. The language node wins on any key it defines; all other keys fall through from the top level.
+
+This works:
+- In `.jsbeautifyrc` and `--config` files in the JavaScript implementation.
+- When passing an options object directly to the API in both the JavaScript and Python implementations.
+
+<Note>
+  In the Python implementation, language override nodes work only when you pass options directly to the API. The Python CLI does not read `.jsbeautifyrc` files.
+</Note>
+
+## Example
+
+```json
+{
+    "indent_size": 4,
+    "html": {
+        "end_with_newline": true,
+        "js": {
+            "indent_size": 2
+        },
+        "css": {
+            "indent_size": 2
+        }
+    },
+    "css": {
+        "indent_size": 1
+    },
+    "js": {
+        "preserve_newlines": true
+    }
+}
+```
+
+## What this config does
+
+**HTML files** inherit `indent_size: 4` from the top level. The `html.end_with_newline: true` setting applies only to HTML output.
+
+**JavaScript and CSS embedded in HTML** both inherit `end_with_newline: true` from the `html` node. They override their indentation to 2 spaces via `html.js.indent_size` and `html.css.indent_size`.
+
+**Standalone CSS files** use `indent_size: 1` from the `css` node, overriding the top-level `4`.
+
+**Standalone JavaScript files** inherit `indent_size: 4` from the top level and set `preserve_newlines: true` from the `js` node.
+
+## Supported override nodes
+
+| Node path | Applies to |
+|---|---|
+| _(top level)_ | All languages |
+| `js` | Standalone JavaScript files |
+| `css` | Standalone CSS files |
+| `html` | Standalone HTML files |
+| `html.js` | JavaScript embedded inside HTML |
+| `html.css` | CSS embedded inside HTML |
+
+## JavaScript API example
+
+```javascript
+import beautify from 'js-beautify';
+
+const options = {
+  indent_size: 4,
+  html: {
+    end_with_newline: true,
+    js: { indent_size: 2 },
+    css: { indent_size: 2 }
+  },
+  css: { indent_size: 1 },
+  js: { preserve_newlines: true }
+};
+
+const htmlResult = beautify.html(source, options);
+const cssResult  = beautify.css(styles, options);
+const jsResult   = beautify.js(script, options);
+```
+
+## Python API example
+
+```python
+import jsbeautifier
+
+opts = jsbeautifier.default_options()
+opts.indent_size = 4
+opts.preserve_newlines = True
+# Python does not support nested language override nodes in options objects;
+# pass separate option objects per beautifier call instead.
+res = jsbeautifier.beautify(code, opts)
+```
+
+<Tip>
+  Use language overrides to enforce consistent indentation across HTML, embedded JavaScript, and embedded CSS without managing three separate config files.
+</Tip>

@@ -1,0 +1,133 @@
+---
+title: "Web Browser"
+description: "Add js-beautify to any web page via CDN script tags and call js_beautify, css_beautify, or html_beautify directly from JavaScript."
+---
+
+## Loading via CDN
+
+JS Beautify is hosted on [cdnjs](https://cdnjs.com/libraries/js-beautify). Include only the script tags you need:
+
+<CodeGroup>
+
+```html Full versions
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify-css.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify-html.js"></script>
+```
+
+```html Minified versions
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify-html.min.js"></script>
+```
+
+</CodeGroup>
+
+<Warning>
+cdnjs is a free service with no uptime guarantee or SLA. For production applications that require reliability, host the library yourself or use a paid CDN.
+</Warning>
+
+## Global Functions
+
+Each script tag exposes a global function:
+
+| Script | Global function |
+|--------|-----------------|
+| `beautify.js` | `js_beautify(code, options)` |
+| `beautify-css.js` | `css_beautify(code, options)` |
+| `beautify-html.js` | `html_beautify(code, options)` |
+
+All three functions accept the source string as the first argument and an options object as the second.
+
+## Complete HTML Example
+
+The following page loads the minified JS beautifier and formats a code string when the button is clicked:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>JS Beautify Demo</title>
+</head>
+<body>
+  <pre id="output"></pre>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.4/beautify.min.js"></script>
+  <script>
+    var ugly = 'function hello(name){return"Hello, "+name;}';
+    var pretty = js_beautify(ugly, { indent_size: 2 });
+    document.getElementById('output').textContent = pretty;
+    // function hello(name) {
+    //   return "Hello, " + name;
+    // }
+  </script>
+</body>
+</html>
+```
+
+## Usage Examples
+
+### Beautify JavaScript
+
+```javascript
+var result = js_beautify('function foo(){return 1;}', {
+  indent_size: 2,
+  brace_style: 'collapse'
+});
+
+// function foo() {
+//   return 1;
+// }
+```
+
+### Beautify CSS
+
+```javascript
+var result = css_beautify('.foo{color:red;background:blue;}', {
+  indent_size: 2
+});
+
+// .foo {
+//   color: red;
+//   background: blue;
+// }
+```
+
+### Beautify HTML
+
+```javascript
+var result = html_beautify('<div><p>Hello <strong>world</strong></p></div>', {
+  indent_size: 2
+});
+
+// <div>
+//   <p>Hello <strong>world</strong></p>
+// </div>
+```
+
+### Beautify JSON
+
+`js_beautify` handles JSON strings directly because JSON is valid JavaScript:
+
+```javascript
+var options = { indent_size: 2, space_in_empty_paren: true };
+
+var dataObj = { completed: false, id: 1, title: 'delectus aut autem', userId: 1 };
+var dataJson = JSON.stringify(dataObj);
+
+var result = js_beautify(dataJson, options);
+
+/* Output:
+{
+  "completed": false,
+  "id": 1,
+  "title": "delectus aut autem",
+  "userId": 1,
+}
+*/
+```
+
+## Older Versions
+
+To use an older release, change the version number in the CDN URL. All published versions are available on [cdnjs](https://cdnjs.com/libraries/js-beautify).
